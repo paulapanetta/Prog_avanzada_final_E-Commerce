@@ -1,4 +1,4 @@
 package factory;
 
-public class DAOFactory {
+public abstract class DAOFactory {
 }
