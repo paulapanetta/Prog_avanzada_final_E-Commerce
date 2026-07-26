@@ -9,7 +9,7 @@ public class Cliente extends Usuario {
                    EstadoUsuario estado) {
 
         super(nombre, apellido, email, password,
-                fechaAlta, estado, Rol.CLIENTE);
+                estado, Rol.CLIENTE);
     }
 
     public Cliente(int id, String nombre, String apellido,

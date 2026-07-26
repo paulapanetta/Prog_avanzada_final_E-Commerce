@@ -9,7 +9,7 @@ public class ResponsableLogistica extends Usuario {
                           EstadoUsuario estado) {
 
         super(nombre, apellido, email, password,
-                fechaAlta, estado, Rol.RESPONSABLE_LOGISTICA);
+                estado, Rol.RESPONSABLE_LOGISTICA);
     }
 
     public ResponsableLogistica(int id, String nombre, String apellido,

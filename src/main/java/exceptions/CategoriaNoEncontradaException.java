@@ -1,4 +1,9 @@
 package exceptions;
 
-public class CategoriaNoEncontradaException {
+public class CategoriaNoEncontradaException extends RuntimeException {
+
+    public CategoriaNoEncontradaException(String mensaje) {
+        super(mensaje);
+    }
+
 }

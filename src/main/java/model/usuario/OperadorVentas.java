@@ -9,7 +9,7 @@ public class OperadorVentas extends Usuario {
                          EstadoUsuario estado) {
 
         super(nombre, apellido, email, password,
-                fechaAlta, estado, Rol.OPERADOR_VENTAS);
+                estado, Rol.OPERADOR_VENTAS);
     }
 
     public OperadorVentas(int id, String nombre, String apellido,

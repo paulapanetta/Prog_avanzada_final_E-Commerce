@@ -9,7 +9,7 @@ public class Administrador extends Usuario {
                    EstadoUsuario estado) {
 
         super(nombre, apellido, email, password,
-                fechaAlta, estado, Rol.ADMINISTRADOR);
+                estado, Rol.ADMINISTRADOR);
     }
 
     public Administrador(int id, String nombre, String apellido,
