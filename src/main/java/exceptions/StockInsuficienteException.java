@@ -1,4 +1,8 @@
 package exceptions;
 
-public class StockInsuficienteException {
+public class StockInsuficienteException extends RuntimeException{
+
+    public StockInsuficienteException(String mensaje) {
+        super(mensaje);
+    }
 }
