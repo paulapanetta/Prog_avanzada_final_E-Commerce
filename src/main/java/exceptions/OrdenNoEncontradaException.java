@@ -1,4 +1,8 @@
 package exceptions;
 
-public class OrdenNoEncontradaException {
+public class OrdenNoEncontradaException extends RuntimeException{
+
+    public OrdenNoEncontradaException(String mensaje){
+        super(mensaje);
+    }
 }

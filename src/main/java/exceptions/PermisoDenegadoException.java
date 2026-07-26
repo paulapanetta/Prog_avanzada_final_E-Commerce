@@ -1,4 +1,8 @@
 package exceptions;
 
-public class PermisoDenegadoException {
+public class PermisoDenegadoException extends RuntimeException{
+
+    public PermisoDenegadoException(String mensaje){
+        super(mensaje);
+    }
 }

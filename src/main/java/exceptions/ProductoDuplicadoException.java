@@ -1,4 +1,8 @@
 package exceptions;
 
-public class ProductoDuplicadoException {
+public class ProductoDuplicadoException extends RuntimeException{
+
+    public ProductoDuplicadoException(String mensaje){
+        super(mensaje);
+    }
 }

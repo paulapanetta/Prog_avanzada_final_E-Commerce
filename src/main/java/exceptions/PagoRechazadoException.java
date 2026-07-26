@@ -1,4 +1,8 @@
 package exceptions;
 
-public class PagoRechazadoException {
+public class PagoRechazadoException extends RuntimeException{
+
+    public PagoRechazadoException(String mensaje) {
+        super(mensaje);
+    }
 }

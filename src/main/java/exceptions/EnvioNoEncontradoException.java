@@ -1,4 +1,8 @@
 package exceptions;
 
-public class EnvioNoEncontradoException {
+public class EnvioNoEncontradoException extends RuntimeException{
+
+    public EnvioNoEncontradoException(String mensaje){
+        super(mensaje);
+    }
 }
