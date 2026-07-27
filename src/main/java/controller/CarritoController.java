@@ -1,17 +1,23 @@
 package controller;
 
 import dao.CarritoDAO;
+import dao.InventarioDAO;
 import model.carrito.Carrito;
+import model.inventario.Inventario;
 import model.producto.Producto;
 import model.usuario.Cliente;
 
 public class CarritoController {
 
     private CarritoDAO carritoDAO;
+    private InventarioDAO inventarioDAO;
 
-
-    public CarritoController(CarritoDAO carritoDAO) {
+    public CarritoController(
+            CarritoDAO carritoDAO,
+            InventarioDAO inventarioDAO
+    ) {
         this.carritoDAO = carritoDAO;
+        this.inventarioDAO = inventarioDAO;
     }
 
 
@@ -28,10 +34,11 @@ public class CarritoController {
         return carrito;
     }
 
-    public void agregarProducto(Cliente cliente, Producto producto, int cantidad) {
+    public void agregarProducto(Cliente cliente, int codigoProducto, int cantidad) {
 
         Carrito carrito = obtenerCarritoDeCliente(cliente);
-        carrito.agregarProducto(producto, cantidad);
+        Inventario inventario = inventarioDAO.buscarPorProducto(codigoProducto);
+        carrito.agregarProducto(inventario, cantidad);
         carritoDAO.actualizar(carrito);
     }
 
@@ -42,10 +49,11 @@ public class CarritoController {
         carritoDAO.actualizar(carrito);
     }
 
-    public void modificarCantidad(Cliente cliente, Producto producto, int nuevaCantidad) {
+    public void modificarCantidad(Cliente cliente, int codigoProducto, int nuevaCantidad) {
 
         Carrito carrito = obtenerCarritoDeCliente(cliente);
-        carrito.modificarCantidad(producto, nuevaCantidad);
+        Inventario inventario = inventarioDAO.buscarPorProducto(codigoProducto);
+        carrito.modificarCantidad(inventario, nuevaCantidad);
         carritoDAO.actualizar(carrito);
     }
 
@@ -54,9 +62,5 @@ public class CarritoController {
         Carrito carrito = obtenerCarritoDeCliente(cliente);
         carrito.vaciar();
         carritoDAO.actualizar(carrito);
-    }
-
-    public double calcularTotal(Cliente cliente) {
-        return obtenerCarritoDeCliente(cliente).calcularTotal();
     }
 }

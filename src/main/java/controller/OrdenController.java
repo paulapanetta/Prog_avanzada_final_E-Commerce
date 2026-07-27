@@ -4,10 +4,10 @@ import dao.OrdenDAO;
 import model.carrito.Carrito;
 import model.carrito.ItemCarrito;
 import model.envio.Envio;
+import model.inventario.Inventario;
 import model.orden.EstadoOrden;
 import model.orden.Orden;
 import model.pago.Pago;
-import model.producto.Producto;
 import model.usuario.Cliente;
 
 import exceptions.CarritoVacioException;
@@ -21,16 +21,16 @@ import java.util.UUID;
 public class OrdenController {
 
     private OrdenDAO ordenDAO;
-    private ProductoController productoController;
     private CarritoController carritoController;
+    private InventarioController inventarioController;
 
 
-    public OrdenController(OrdenDAO ordenDAO, ProductoController productoController,
-                           CarritoController carritoController) {
+    public OrdenController(OrdenDAO ordenDAO, CarritoController carritoController,
+                           InventarioController inventarioController) {
 
         this.ordenDAO = ordenDAO;
-        this.productoController = productoController;
         this.carritoController = carritoController;
+        this.inventarioController = inventarioController;
     }
 
     public Orden generarOrden(Cliente cliente, Envio envio) {
@@ -48,26 +48,42 @@ public class OrdenController {
         // valida stock de todos los ítems antes de descontar nada
         for (ItemCarrito item : carrito.getItems()) {
 
-            Producto producto = productoController.buscarPorId(item.getProducto().getCodigo());
+            Inventario inventario =
+                    inventarioController.buscarPorProducto(
+                            item.getProducto().getCodigo()
+                    );
 
-            if (item.getCantidad() > producto.getStock()) {
+            if (item.getCantidad() > inventario.getStockActual()) {
+
                 throw new StockInsuficienteException(
-                        "No hay stock suficiente de '" + producto.getNombre() + "'"
+                        "No hay stock suficiente de '"
+                                + item.getProducto().getNombre()
+                                + "'"
                 );
             }
         }
 
         for (ItemCarrito item : carrito.getItems()) {
-            productoController.egresarStock(item.getProducto().getCodigo(), item.getCantidad());
+
+            inventarioController.egresarStock(
+                    item.getProducto().getCodigo(),
+                    item.getCantidad()
+            );
         }
 
-        Orden orden = new Orden(generarNumero(), carrito, envio);
-        ordenDAO.guardar(orden);
+        Orden orden =
+                new Orden(
+                        generarNumero(),
+                        carrito,
+                        envio
+                );
 
+        ordenDAO.guardar(orden);
         carritoController.vaciar(cliente);
 
         return orden;
     }
+
 
     public Orden buscarPorId(int id) {
 
@@ -135,3 +151,4 @@ public class OrdenController {
         return "ORD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 }
+

@@ -45,7 +45,7 @@ public class Orden {
         this.cliente = carrito.getCliente();
         this.fecha = LocalDate.now();
         this.items = new ArrayList<>(carrito.getItems());
-        this.total = carrito.calcularTotal();
+        this.total = carrito.calcularPrecioFinal();
         this.envio = envio;
         this.estado = EstadoOrden.CREADA;
         this.historial = new ArrayList<>();

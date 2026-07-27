@@ -102,27 +102,6 @@ public class ProductoController {
         productoDAO.actualizar(producto);
     }
 
-    public void ingresarStock(int codigo, int cantidad) {
-
-        Producto producto = buscarPorId(codigo);
-        producto.ingresarStock(cantidad);
-        productoDAO.actualizar(producto);
-    }
-
-    public void egresarStock(int codigo, int cantidad) {
-
-        Producto producto = buscarPorId(codigo);
-        producto.egresarStock(cantidad);
-        productoDAO.actualizar(producto);
-    }
-
-    public void ajustarStock(int codigo, int cantidad) {
-
-        Producto producto = buscarPorId(codigo);
-        producto.ajustarStock(cantidad);
-        productoDAO.actualizar(producto);
-    }
-
     public void aplicarDescuento(int codigo, double porcentaje) {
 
         Producto producto = buscarPorId(codigo);
