@@ -6,20 +6,19 @@ public class ProductoImportado extends Producto{
 
     public ProductoImportado(String nombre, String descripcion,
                              double precio, Categoria categoria,
-                             int stock, double peso,
-                             EstadoProducto estado) {
+                             double peso, EstadoProducto estado) {
 
         super(nombre, descripcion, precio, categoria,
-                stock, peso, estado);
+                peso, estado);
     }
 
     public ProductoImportado(int codigo, String nombre,
                              String descripcion, double precio,
-                             Categoria categoria, int stock,
+                             Categoria categoria,
                              double peso, EstadoProducto estado) {
 
         super(codigo, nombre, descripcion, precio,
-                categoria, stock, peso, estado);
+                categoria, peso, estado);
     }
 
     @Override
