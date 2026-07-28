@@ -45,7 +45,6 @@ public class OrdenController {
             throw new CarritoVacioException("El carrito está vacio, no se puede generar la orden");
         }
 
-        // valida stock de todos los ítems antes de descontar nada
         for (ItemCarrito item : carrito.getItems()) {
 
             Inventario inventario =
