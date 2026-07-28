@@ -1,9 +1,9 @@
 package model.inventario;
 
-import exceptions.StockInsuficienteException;
+import exceptions.ProductoDuplicadoException;
+import exceptions.ProductoNoEncontradoException;
 import exceptions.StockNegativoException;
 import model.interfaces.Mostrable;
-import model.producto.Producto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,138 +11,167 @@ import java.util.List;
 public class Inventario implements Mostrable {
 
     private int id;
-    private Producto producto;
-    private int stockActual;
+    private List<StockProducto> stocks;
     private List<MovimientoStock> movimientos;
 
 
-    public Inventario(Producto producto) {
+    public Inventario() {
 
-        this.producto = producto;
-        this.stockActual = 0;
-        this.movimientos = new ArrayList<>();
+        stocks = new ArrayList<>();
+        movimientos = new ArrayList<>();
     }
 
-
-    // Recuperado de la BD
-    public Inventario(int id, Producto producto, int stockActual) {
+    public Inventario(int id) {
 
         this.id = id;
-        this.producto = producto;
-        this.stockActual = stockActual;
-        this.movimientos = new ArrayList<>();
+        stocks = new ArrayList<>();
+        movimientos = new ArrayList<>();
     }
 
 
-    public int getId() { return id; }
+    public int getId() {return id;}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public List<StockProducto> getStocks() {return stocks;}
 
-    public Producto getProducto(){ return producto; }
+    public List<MovimientoStock> getMovimientos() {return movimientos;}
 
-    public int getStockActual(){ return stockActual; }
+    public void agregarProducto(StockProducto stockProducto){
 
-    public void setStockActual(int stockActual){
+        StockProducto existente =
+                buscarStock(stockProducto.getProducto().getCodigo());
 
-        if(stockActual < 0){
-
-            throw new StockNegativoException(
-                    "El stock no puede ser negativo"
-            );
+        if(existente != null){
+            throw new ProductoDuplicadoException("El producto ya existe en el inventario.");
         }
 
-        this.stockActual = stockActual;
+        stocks.add(stockProducto);
     }
 
 
-    public void ingresarStock(int cantidad) {
+    public StockProducto buscarStock(
+            int codigoProducto
+    ){
+
+        for(StockProducto stock : stocks){
+
+            if(stock.getProducto()
+                    .getCodigo() == codigoProducto){
+
+                return stock;
+            }
+        }
+
+        return null;
+    }
+
+    public void ingresarStock(
+            int codigoProducto,
+            int cantidad
+    ){
 
         validarCantidad(cantidad);
 
-        stockActual += cantidad;
+        StockProducto stock =
+                buscarStock(codigoProducto);
+
+        if(stock == null){
+
+            throw new ProductoNoEncontradoException("El producto no existe en inventario.");
+        }
+
+        stock.sumar(cantidad);
+
 
         registrarMovimiento(
+                codigoProducto,
                 TipoMovimiento.INGRESO,
                 cantidad,
                 "Ingreso de stock"
         );
     }
 
-    public void egresarStock(int cantidad) {
+    public void egresarStock(
+            int codigoProducto,
+            int cantidad
+        ){
 
-        validarCantidad(cantidad);
+        StockProducto stock = buscarStock(codigoProducto);
 
-        if(cantidad > stockActual){
-
-            throw new StockInsuficienteException(
-                    "No hay stock suficiente para realizar la operación"
-            );
+        if(stock == null){
+            throw new ProductoNoEncontradoException("El producto no existe en inventario.");
         }
 
-        stockActual -= cantidad;
+        stock.restar(cantidad);
 
         registrarMovimiento(
+                codigoProducto,
                 TipoMovimiento.EGRESO,
                 cantidad,
                 "Egreso de stock"
         );
     }
 
-    public void ajustarStock(int nuevoStock) {
+    public void ajustarStock(
+            int codigoProducto,
+            int nuevoStock
+    ){
 
         if(nuevoStock < 0){
 
-            throw new StockNegativoException(
-                    "El stock no puede ser negativo"
-            );
+            throw new StockNegativoException("El stock no puede ser negativo.");
         }
 
-        int diferencia = nuevoStock - stockActual;
+        StockProducto stock = buscarStock(codigoProducto);
 
-        stockActual = nuevoStock;
+        if(stock == null){
+            throw new ProductoNoEncontradoException("El producto no existe en inventario.");
+        }
+
+        stock.ajustarCantidad(nuevoStock);
 
         registrarMovimiento(
+                codigoProducto,
                 TipoMovimiento.AJUSTE,
-                diferencia,
-                "Ajuste manual de stock"
+                nuevoStock,
+                "Ajuste manual"
         );
     }
-
-    public boolean tieneStock(){ return stockActual > 0; }
-
-    public List<MovimientoStock> getMovimientos(){ return movimientos; }
-
 
     private void validarCantidad(int cantidad){
 
         if(cantidad <= 0){
 
-            throw new StockNegativoException(
-                    "La cantidad debe ser mayor a cero"
-            );
+            throw new StockNegativoException("La cantidad debe ser mayor a cero.");
         }
     }
 
     private void registrarMovimiento(
+            int codigoProducto,
             TipoMovimiento tipo,
             int cantidad,
             String descripcion
     ){
 
-        MovimientoStock movimiento =
+        movimientos.add(
                 new MovimientoStock(
-                        producto.getCodigo(),
+                        codigoProducto,
                         tipo,
                         cantidad,
                         descripcion
-                );
-
-
-        movimientos.add(movimiento);
+                )
+        );
     }
 
+    public int consultarStock(int codigoProducto){
+
+        StockProducto stock = buscarStock(codigoProducto);
+
+        if(stock == null){
+            throw new ProductoNoEncontradoException("El producto no existe en inventario.");
+        }
+
+        return stock.getCantidad();
+    }
 
     @Override
     public void mostrarInformacion(){
@@ -150,14 +179,14 @@ public class Inventario implements Mostrable {
         System.out.println(this);
     }
 
+
     @Override
-    public String toString(){
+    public String toString() {
 
         return "Inventario{" +
                 "id=" + id +
-                ", codigoProducto=" + producto.getCodigo() +
-                ", producto=" + producto.getNombre() +
-                ", stockActual=" + stockActual +
+                ", stocks=" + stocks +
+                ", movimientos=" + movimientos +
                 '}';
     }
 

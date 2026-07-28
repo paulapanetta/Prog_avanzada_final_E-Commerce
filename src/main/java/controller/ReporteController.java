@@ -4,6 +4,7 @@ import dao.*;
 import model.envio.Envio;
 import model.envio.EstadoEnvio;
 import model.inventario.Inventario;
+import model.inventario.StockProducto;
 import model.orden.EstadoOrden;
 import model.orden.Orden;
 import model.postventa.EstadoReclamo;
@@ -89,12 +90,14 @@ public class ReporteController {
 
 
     // productos sin stock
-    public List<Inventario> productosSinStock() {
+    public List<StockProducto> productosSinStock() {
 
-        return inventarioDAO.listar()
+        Inventario inventario = inventarioDAO.obtenerInventario();
+
+        return inventario.getStocks()
                 .stream()
-                .filter(inventario ->
-                        inventario.getStockActual() == 0)
+                .filter(stock ->
+                        stock.getCantidad() == 0)
                 .toList();
     }
 

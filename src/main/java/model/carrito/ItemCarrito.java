@@ -27,9 +27,27 @@ public class ItemCarrito {
 
         this.producto = producto;
         this.cantidad = cantidad;
-        this.precioUnitario = producto.calcularPrecioFinal();
+        this.precioUnitario = producto.getPrecio();
     }
 
+
+    public ItemCarrito(Producto producto, int cantidad, double precioUnitario) {
+        if(producto == null){
+            throw new DatosInvalidosException(
+                    "El item tiene que tener un producto asociado"
+            );
+        }
+
+        if(cantidad <= 0){
+            throw new DatosInvalidosException(
+                    "La cantidad tiene que ser mayor a cero"
+            );
+        }
+
+        this.producto = producto;
+        this.cantidad = cantidad;
+        this.precioUnitario = precioUnitario;
+    }
 
     public Producto getProducto() { return producto; }
 

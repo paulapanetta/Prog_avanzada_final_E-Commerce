@@ -30,15 +30,11 @@ public class Orden {
     public Orden(String numero, Carrito carrito, Envio envio) {
 
         if (numero == null || numero.isBlank()) {
-            throw new DatosInvalidosException(
-                    "La orden debe tener un numero"
-            );
+            throw new DatosInvalidosException("La orden debe tener un numero");
         }
 
         if (carrito == null || carrito.getItems().isEmpty()) {
-            throw new CarritoVacioException(
-                    "No se puede generar una orden a partir de un carrito vacio"
-            );
+            throw new CarritoVacioException("No se puede generar una orden a partir de un carrito vacio");
         }
 
         this.numero = numero;
@@ -62,12 +58,12 @@ public class Orden {
         this.numero = numero;
         this.cliente = cliente;
         this.fecha = fecha;
-        this.items = items;
+        this.items = items != null ? items : new ArrayList<>();
         this.total = total;
         this.estado = estado;
         this.pago = pago;
         this.envio = envio;
-        this.historial = historial;
+        this.historial = historial != null ? historial : new ArrayList<>();
     }
 
 

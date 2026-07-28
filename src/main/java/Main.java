@@ -1,11 +1,18 @@
 import menu.MenuLogin;
 import menu.MenuPrincipal;
+import model.producto.EstadoCategoria;
 import model.usuario.Usuario;
+import database.DatabaseManager;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
+        System.out.println(EstadoCategoria.ACTIVA.name());
+        System.out.println(EstadoCategoria.INACTIVA.name());
+
+        DatabaseManager.inicializarBase();
 
         Scanner scanner = new Scanner(System.in);
 
@@ -21,6 +28,7 @@ public class Main {
         MenuPrincipal menuPrincipal = new MenuPrincipal(scanner, usuario);
         menuPrincipal.iniciar();
 
+        DatabaseManager.cerrarConexion();
         scanner.close();
     }
 }

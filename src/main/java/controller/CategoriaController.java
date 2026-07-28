@@ -1,21 +1,26 @@
 package controller;
 
 import dao.CategoriaDAO;
+import dao.ProductoDAO;
+import exceptions.CategoriaConProductosException;
 import model.producto.Categoria;
 import model.producto.EstadoCategoria;
 
 import exceptions.CategoriaNoEncontradaException;
 import exceptions.DatosInvalidosException;
+import model.producto.Producto;
 
 import java.util.List;
 
 public class CategoriaController {
 
     private CategoriaDAO categoriaDAO;
+    private ProductoDAO productoDAO;
 
 
-    public CategoriaController(CategoriaDAO categoriaDAO) {
+    public CategoriaController(CategoriaDAO categoriaDAO,  ProductoDAO productoDAO) {
         this.categoriaDAO = categoriaDAO;
+        this.productoDAO = productoDAO;
     }
 
 
@@ -88,7 +93,14 @@ public class CategoriaController {
 
     public void eliminar(int id) {
 
-        buscarPorId(id);
+        List<Producto> productos = productoDAO.buscarPorCategoria(id);
+
+        if (!productos.isEmpty()) {
+            throw new CategoriaConProductosException(
+                    "No se puede eliminar la categoría porque tiene productos asociados."
+            );
+        }
+
         categoriaDAO.eliminar(id);
     }
 

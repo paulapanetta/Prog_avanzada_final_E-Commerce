@@ -23,14 +23,6 @@ public class MenuLogin {
     }
 
     private void cargarUsuariosPrueba() {
-        usuariosPrueba.put("cliente@mail.com", new Cliente(
-                "Juan", "Pérez", "cliente@mail.com", "1234", LocalDate.now(), EstadoUsuario.ACTIVO));
-        usuariosPrueba.put("admin@mail.com", new Administrador(
-                "Ana", "Gómez", "admin@mail.com", "1234", LocalDate.now(), EstadoUsuario.ACTIVO));
-        usuariosPrueba.put("ventas@mail.com", new OperadorVentas(
-                "Luis", "Díaz", "ventas@mail.com", "1234", LocalDate.now(), EstadoUsuario.ACTIVO));
-        usuariosPrueba.put("logistica@mail.com", new ResponsableLogistica(
-                "Sol", "Ruiz", "logistica@mail.com", "1234", LocalDate.now(), EstadoUsuario.ACTIVO));
     }
 
     private Usuario autenticarModoPrueba(String email, String password) {

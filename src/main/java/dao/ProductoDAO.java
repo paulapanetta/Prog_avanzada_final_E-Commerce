@@ -10,6 +10,7 @@ public interface ProductoDAO {
     Producto buscarPorId(int codigo);
     Producto buscarPorNombre(String nombre);
     List<Producto> obtenerTodos();
+    List<Producto> buscarPorCategoria(int idCategoria);
     void actualizar(Producto producto);
     void eliminar(int codigo);
 

@@ -7,7 +7,6 @@ public interface InventarioDAO {
 
     void guardar(Inventario inventario);
     void actualizar(Inventario inventario);
-    Inventario buscarPorProducto(int codigoProducto);
-    List<Inventario> listar();
+    Inventario obtenerInventario();
     void eliminar(int id);
 }

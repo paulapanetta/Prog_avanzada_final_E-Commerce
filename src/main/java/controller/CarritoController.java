@@ -2,8 +2,10 @@ package controller;
 
 import dao.CarritoDAO;
 import dao.InventarioDAO;
+import exceptions.ProductoNoEncontradoException;
 import model.carrito.Carrito;
 import model.inventario.Inventario;
+import model.inventario.StockProducto;
 import model.producto.Producto;
 import model.usuario.Cliente;
 
@@ -37,9 +39,20 @@ public class CarritoController {
     public void agregarProducto(Cliente cliente, int codigoProducto, int cantidad) {
 
         Carrito carrito = obtenerCarritoDeCliente(cliente);
-        Inventario inventario = inventarioDAO.buscarPorProducto(codigoProducto);
-        carrito.agregarProducto(inventario, cantidad);
+        Inventario inventario = inventarioDAO.obtenerInventario();
+        StockProducto stockProducto = inventario.buscarStock(codigoProducto);
+
+        if(stockProducto == null){
+            throw new ProductoNoEncontradoException("El producto no existe en inventario.");
+        }
+
+        carrito.agregarProducto(
+                stockProducto,
+                cantidad
+        );
+
         carritoDAO.actualizar(carrito);
+
     }
 
     public void eliminarProducto(Cliente cliente, Producto producto) {
@@ -52,8 +65,18 @@ public class CarritoController {
     public void modificarCantidad(Cliente cliente, int codigoProducto, int nuevaCantidad) {
 
         Carrito carrito = obtenerCarritoDeCliente(cliente);
-        Inventario inventario = inventarioDAO.buscarPorProducto(codigoProducto);
-        carrito.modificarCantidad(inventario, nuevaCantidad);
+        Inventario inventario = inventarioDAO.obtenerInventario();
+        StockProducto stockProducto = inventario.buscarStock(codigoProducto);
+
+        if(stockProducto == null){
+            throw new ProductoNoEncontradoException("El producto no existe en inventario.");
+        }
+
+        carrito.modificarCantidad(
+                stockProducto,
+                nuevaCantidad
+        );
+
         carritoDAO.actualizar(carrito);
     }
 

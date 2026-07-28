@@ -26,10 +26,12 @@ public class ProductoController {
             throw new DatosInvalidosException("El producto no puede estar vacio");
         }
 
+        if (producto.getCategoria() == null) {
+            throw new DatosInvalidosException("El producto debe tener una categoría.");
+        }
+
         if (productoDAO.buscarPorNombre(producto.getNombre()) != null) {
-            throw new ProductoDuplicadoException(
-                    "Ya existe un producto con el nombre '" + producto.getNombre() + "'"
-            );
+            throw new ProductoDuplicadoException("Ya existe un producto con el nombre '" + producto.getNombre() + "'");
         }
 
         productoDAO.guardar(producto);
@@ -40,9 +42,7 @@ public class ProductoController {
         Producto producto = productoDAO.buscarPorId(codigo);
 
         if (producto == null) {
-            throw new ProductoNoEncontradoException(
-                    "No existe un producto con codigo " + codigo
-            );
+            throw new ProductoNoEncontradoException("No existe un producto con codigo " + codigo);
         }
 
         return producto;
@@ -63,9 +63,7 @@ public class ProductoController {
         Producto existente = productoDAO.buscarPorNombre(nombre);
 
         if (existente != null && existente.getCodigo() != codigo) {
-            throw new ProductoDuplicadoException(
-                    "Ya existe otro producto con el nombre '" + nombre + "'"
-            );
+            throw new ProductoDuplicadoException("Ya existe otro producto con el nombre '" + nombre + "'");
         }
 
         producto.setNombre(nombre);

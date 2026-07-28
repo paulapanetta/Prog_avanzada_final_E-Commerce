@@ -1,75 +1,87 @@
 package controller;
 
 import dao.InventarioDAO;
-import model.inventario.Inventario;
-
-import exceptions.DatosInvalidosException;
 import exceptions.ProductoNoEncontradoException;
+import model.inventario.Inventario;
+import model.inventario.StockProducto;
 
 public class InventarioController {
 
     private InventarioDAO inventarioDAO;
 
+    public InventarioController(
+            InventarioDAO inventarioDAO
+    ){
 
-    public InventarioController(InventarioDAO inventarioDAO) {
         this.inventarioDAO = inventarioDAO;
     }
 
+    public Inventario obtenerInventario(){
 
-    public Inventario buscarPorProducto(int codigoProducto) {
+        return inventarioDAO.obtenerInventario();
+    }
+
+
+    public void ingresarStock(
+            int codigoProducto,
+            int cantidad
+    ){
 
         Inventario inventario =
-                inventarioDAO.buscarPorProducto(codigoProducto);
+                obtenerInventario();
 
-        if (inventario == null) {
-            throw new ProductoNoEncontradoException(
-                    "No existe inventario para el producto con codigo "
-                            + codigoProducto
-            );
+        inventario.ingresarStock(
+                codigoProducto,
+                cantidad
+        );
+
+        inventarioDAO.actualizar(inventario);
+    }
+
+    public void egresarStock(
+            int codigoProducto,
+            int cantidad
+    ){
+
+        Inventario inventario =
+                obtenerInventario();
+
+        inventario.egresarStock(
+                codigoProducto,
+                cantidad
+        );
+
+        inventarioDAO.actualizar(inventario);
+    }
+
+    public void ajustarStock(
+            int codigoProducto,
+            int cantidad
+    ){
+
+        Inventario inventario =
+                obtenerInventario();
+
+        inventario.ajustarStock(
+                codigoProducto,
+                cantidad
+        );
+
+        inventarioDAO.actualizar(inventario);
+    }
+
+
+    public StockProducto buscarStock(int codigoProducto){
+
+        Inventario inventario = inventarioDAO.obtenerInventario();
+
+        StockProducto stock = inventario.buscarStock(codigoProducto);
+
+        if(stock == null){
+
+            throw new ProductoNoEncontradoException("El producto no existe en inventario.");
         }
 
-        return inventario;
-    }
-
-
-    public void ingresarStock(int codigoProducto, int cantidad) {
-
-        Inventario inventario =
-                buscarPorProducto(codigoProducto);
-
-        inventario.ingresarStock(cantidad);
-
-        inventarioDAO.actualizar(inventario);
-    }
-
-
-    public void egresarStock(int codigoProducto, int cantidad) {
-
-        Inventario inventario =
-                buscarPorProducto(codigoProducto);
-
-        inventario.egresarStock(cantidad);
-
-        inventarioDAO.actualizar(inventario);
-    }
-
-
-    public void ajustarStock(int codigoProducto, int cantidad) {
-
-        Inventario inventario =
-                buscarPorProducto(codigoProducto);
-
-        inventario.ajustarStock(cantidad);
-
-        inventarioDAO.actualizar(inventario);
-    }
-
-
-    public int consultarStock(int codigoProducto) {
-
-        Inventario inventario =
-                buscarPorProducto(codigoProducto);
-
-        return inventario.getStockActual();
+        return stock;
     }
 }

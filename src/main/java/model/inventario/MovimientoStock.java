@@ -22,6 +22,22 @@ public class MovimientoStock {
         this.descripcion = descripcion;
     }
 
+    // recupera bd
+    public MovimientoStock(int id,
+                           int codigoProducto,
+                           TipoMovimiento tipo,
+                           int cantidad,
+                           LocalDateTime fecha,
+                           String descripcion) {
+
+        this.id = id;
+        this.codigoProducto = codigoProducto;
+        this.tipo = tipo;
+        this.cantidad = cantidad;
+        this.fecha = fecha;
+        this.descripcion = descripcion;
+    }
+
 
     public int getId() { return id; }
 

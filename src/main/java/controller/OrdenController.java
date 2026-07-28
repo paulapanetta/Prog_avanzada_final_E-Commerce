@@ -4,7 +4,7 @@ import dao.OrdenDAO;
 import model.carrito.Carrito;
 import model.carrito.ItemCarrito;
 import model.envio.Envio;
-import model.inventario.Inventario;
+import model.inventario.StockProducto;
 import model.orden.EstadoOrden;
 import model.orden.Orden;
 import model.pago.Pago;
@@ -47,12 +47,11 @@ public class OrdenController {
 
         for (ItemCarrito item : carrito.getItems()) {
 
-            Inventario inventario =
-                    inventarioController.buscarPorProducto(
+            StockProducto stock = inventarioController.buscarStock(
                             item.getProducto().getCodigo()
                     );
 
-            if (item.getCantidad() > inventario.getStockActual()) {
+            if (item.getCantidad() > stock.getCantidad()) {
 
                 throw new StockInsuficienteException(
                         "No hay stock suficiente de '"

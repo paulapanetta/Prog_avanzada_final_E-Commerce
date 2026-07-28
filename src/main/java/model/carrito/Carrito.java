@@ -1,6 +1,7 @@
 package model.carrito;
 
 import model.interfaces.Calculable;
+import model.inventario.StockProducto;
 import model.producto.Producto;
 import model.inventario.Inventario;
 import model.usuario.Cliente;
@@ -42,40 +43,38 @@ public class Carrito implements Calculable {
 
     public int getId() { return id; }
 
+    public void setId(int id){
+        this.id = id;
+    }
+
     public Cliente getCliente() { return cliente; }
 
     public List<ItemCarrito> getItems() { return items; }
 
 
-    public void agregarProducto(Inventario inventario, int cantidad) {
+    public void agregarProducto(StockProducto stockProducto, int cantidad) {
 
         if (cantidad <= 0) {
-            throw new DatosInvalidosException(
-                    "La cantidad tiene que ser mayor a cero"
-            );
+            throw new DatosInvalidosException("La cantidad tiene que ser mayor a cero");
         }
 
-        if (!inventario.tieneStock()) {
-            throw new StockInsuficienteException(
-                    "El producto '" + inventario.getProducto().getNombre() + "' no esta disponible"
-            );
+        if (stockProducto.getCantidad() <= 0) {
+            throw new StockInsuficienteException("El producto no tiene stock disponible");
         }
 
-        Optional<ItemCarrito> existente = buscarItem(inventario.getProducto());
+        Optional<ItemCarrito> existente = buscarItem(stockProducto.getProducto());
 
         int cantidadTotal = cantidad + existente.map(ItemCarrito::getCantidad).orElse(0);
 
-        if (cantidadTotal > inventario.getStockActual()) {
-            throw new StockInsuficienteException(
-                    "No hay stock suficiente de '"
-                            + inventario.getProducto().getNombre() + "'"
+        if (cantidadTotal > stockProducto.getCantidad()) {
+            throw new StockInsuficienteException("No hay stock suficiente de '" + stockProducto.getProducto().getNombre() + "'"
             );
         }
 
         if (existente.isPresent()) {
             existente.get().setCantidad(cantidadTotal);
         } else {
-            items.add(new ItemCarrito(inventario.getProducto(), cantidad));
+            items.add(new ItemCarrito(stockProducto.getProducto(), cantidad));
         }
     }
 
@@ -83,28 +82,19 @@ public class Carrito implements Calculable {
         items.removeIf(item -> item.getProducto().getCodigo() == producto.getCodigo());
     }
 
-    public void modificarCantidad(Inventario inventario, int nuevaCantidad) {
+    public void modificarCantidad(StockProducto stockProducto, int nuevaCantidad) {
 
         if (nuevaCantidad <= 0) {
-            throw new DatosInvalidosException(
-                    "La cantidad tiene que ser mayor a cero"
+            throw new DatosInvalidosException("La cantidad tiene que ser mayor a cero");
+        }
+
+        if (nuevaCantidad > stockProducto.getCantidad()) {
+            throw new StockInsuficienteException("No hay stock suficiente de '" + stockProducto.getProducto().getNombre() + "'"
             );
         }
 
-        if (nuevaCantidad > inventario.getStockActual()) {
-            throw new StockInsuficienteException(
-                    "No hay stock suficiente de '"
-                            + inventario.getProducto().getNombre() + "'"
-            );
-        }
-
-        ItemCarrito item = buscarItem(inventario.getProducto()).orElseThrow(() ->
-                new DatosInvalidosException(
-                        "El producto '"
-                                + inventario.getProducto().getNombre()
-                                + "' no esta en el carrito"
-                )
-        );
+        ItemCarrito item = buscarItem(stockProducto.getProducto()).orElseThrow(() ->
+                new DatosInvalidosException("El producto no está en el carrito"));
 
         item.setCantidad(nuevaCantidad);
     }
