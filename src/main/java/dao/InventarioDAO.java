@@ -1,7 +1,6 @@
 package dao;
 
 import model.inventario.Inventario;
-import java.util.List;
 
 public interface InventarioDAO {
 

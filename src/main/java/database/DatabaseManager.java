@@ -167,7 +167,7 @@ public class DatabaseManager {
 
             stmt.execute("""
                     CREATE TABLE IF NOT EXISTS reclamos(
-                        id INTEGER PRIMARY KEY,
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
                         cliente_id INTEGER NOT NULL,
                         orden_id INTEGER NOT NULL,
                         motivo TEXT NOT NULL,
@@ -242,7 +242,6 @@ public class DatabaseManager {
                     );
                     """);
 
-            System.out.println("Base de datos inicializada correctamente.");
 
         } catch (SQLException e) {
             System.out.println("Error al inicializar la base de datos.");

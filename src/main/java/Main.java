@@ -1,6 +1,6 @@
+import database.Datos;
 import menu.MenuLogin;
 import menu.MenuPrincipal;
-import model.producto.EstadoCategoria;
 import model.usuario.Usuario;
 import database.DatabaseManager;
 
@@ -9,26 +9,34 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(EstadoCategoria.ACTIVA.name());
-        System.out.println(EstadoCategoria.INACTIVA.name());
-
         DatabaseManager.inicializarBase();
+        Datos.cargar();
 
-        Scanner scanner = new Scanner(System.in);
+        try {
 
-        MenuLogin menuLogin = new MenuLogin(scanner);
-        Usuario usuario = menuLogin.iniciarSesion();
+            Datos.cargar();
 
-        if (usuario == null) {
-            System.out.println("No se inicio sesion. Cerrando el sistema.");
+            Scanner scanner = new Scanner(System.in);
+
+            MenuLogin menuLogin = new MenuLogin(scanner);
+            Usuario usuario = menuLogin.iniciarSesion();
+
+            if (usuario == null) {
+                System.out.println("No se inicio sesion. Cerrando el sistema.");
+                scanner.close();
+                return;
+            }
+
+            MenuPrincipal menuPrincipal = new MenuPrincipal(scanner, usuario);
+            menuPrincipal.iniciar();
+
             scanner.close();
-            return;
+
+        } finally {
+
+            DatabaseManager.cerrarConexion();
+
         }
-
-        MenuPrincipal menuPrincipal = new MenuPrincipal(scanner, usuario);
-        menuPrincipal.iniciar();
-
-        DatabaseManager.cerrarConexion();
-        scanner.close();
     }
+
 }

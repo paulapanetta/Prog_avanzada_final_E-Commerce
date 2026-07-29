@@ -5,7 +5,6 @@ import model.usuario.Usuario;
 import exceptions.PermisoDenegadoException;
 
 import java.util.EnumMap;
-import java.util.EnumSet;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -121,7 +120,7 @@ public class MenuPrincipal {
 
     private void mostrarOpciones(Set<Integer> opcionesPermitidas) {
         System.out.println();
-        System.out.println("CAFETERIA (" + usuarioLogueado.getRol() + ")");
+        System.out.println("=== SISTEMA E-COMMERCE - CAFETERIA === (" + usuarioLogueado.getRol() + ")");
 
         for (int i = 1; i <= 12; i++) {
             if (opcionesPermitidas.contains(i)) {

@@ -2,7 +2,6 @@ package factory;
 
 import dao.*;
 import dao.impl.*;
-import factory.DAOFactory;
 
 public class SQLiteDAOFactory implements DAOFactory {
 
@@ -16,6 +15,8 @@ public class SQLiteDAOFactory implements DAOFactory {
     private ReclamoDAO reclamoDAO;
     private DevolucionDAO devolucionDAO;
     private CalificacionDAO calificacionDAO;
+    private InventarioDAO inventarioDAO;
+    private CarritoDAO carritoDAO;
 
 
     @Override
@@ -141,4 +142,29 @@ public class SQLiteDAOFactory implements DAOFactory {
 
         return calificacionDAO;
     }
+
+    @Override
+    public InventarioDAO crearInventarioDAO() {
+
+        if (inventarioDAO == null) {
+            inventarioDAO = new SQLiteInventarioDAO(crearProductoDAO());
+        }
+
+        return inventarioDAO;
+    }
+
+    @Override
+    public CarritoDAO crearCarritoDAO() {
+
+        if(carritoDAO == null){
+
+            carritoDAO =
+                    new SQLiteCarritoDAO(
+                            crearProductoDAO(),
+                            crearUsuarioDAO()
+                    );
+        }
+        return carritoDAO;
+    }
+
 }

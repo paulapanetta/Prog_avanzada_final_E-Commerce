@@ -12,6 +12,8 @@ public interface DAOFactory {
 
     OrdenDAO crearOrdenDAO();
 
+    CarritoDAO crearCarritoDAO();
+
     PagoDAO crearPagoDAO();
 
     EnvioDAO crearEnvioDAO();
@@ -21,5 +23,7 @@ public interface DAOFactory {
     DevolucionDAO crearDevolucionDAO();
 
     CalificacionDAO crearCalificacionDAO();
+
+    InventarioDAO crearInventarioDAO();
 
 }

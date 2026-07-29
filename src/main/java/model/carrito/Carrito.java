@@ -3,7 +3,6 @@ package model.carrito;
 import model.interfaces.Calculable;
 import model.inventario.StockProducto;
 import model.producto.Producto;
-import model.inventario.Inventario;
 import model.usuario.Cliente;
 
 import exceptions.CarritoVacioException;

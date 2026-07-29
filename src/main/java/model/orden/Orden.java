@@ -109,6 +109,10 @@ public class Orden {
             );
         }
 
+        if (estado == EstadoOrden.PAGADA) {
+            throw new DatosInvalidosException("La orden ya fue pagada.");
+        }
+
         cambiarEstado(EstadoOrden.PENDIENTE_PAGO);
         pago.procesar();
         cambiarEstado(EstadoOrden.PAGADA);

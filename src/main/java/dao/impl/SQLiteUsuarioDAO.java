@@ -3,11 +3,7 @@ package dao.impl;
 import dao.UsuarioDAO;
 import database.DatabaseManager;
 import exceptions.UsuarioNoEncontradoException;
-import model.usuario.Administrador;
-import model.usuario.Cliente;
-import model.usuario.EstadoUsuario;
-import model.usuario.Rol;
-import model.usuario.Usuario;
+import model.usuario.*;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -230,27 +226,65 @@ public class SQLiteUsuarioDAO implements UsuarioDAO {
                         rs.getString("estado")
                 );
 
-        if(rol == Rol.CLIENTE){
+        switch(rol) {
 
-            return new Cliente(
-                    id,
-                    nombre,
-                    apellido,
-                    email,
-                    password,
-                    fechaAlta,
-                    estado
-            );
+            case CLIENTE:
+
+                return new Cliente(
+                        id,
+                        nombre,
+                        apellido,
+                        email,
+                        password,
+                        fechaAlta,
+                        estado
+                );
+
+
+            case ADMINISTRADOR:
+
+                return new Administrador(
+                        id,
+                        nombre,
+                        apellido,
+                        email,
+                        password,
+                        fechaAlta,
+                        estado
+                );
+
+
+            case OPERADOR_VENTAS:
+
+                return new OperadorVentas(
+                        id,
+                        nombre,
+                        apellido,
+                        email,
+                        password,
+                        fechaAlta,
+                        estado
+                );
+
+
+            case RESPONSABLE_LOGISTICA:
+
+                return new ResponsableLogistica(
+                        id,
+                        nombre,
+                        apellido,
+                        email,
+                        password,
+                        fechaAlta,
+                        estado
+                );
+
+
+            default:
+
+                throw new IllegalArgumentException(
+                        "Rol de usuario desconocido: " + rol
+                );
         }
-
-        return new Administrador(
-                id,
-                nombre,
-                apellido,
-                email,
-                password,
-                fechaAlta,
-                estado
-        );
     }
 }
