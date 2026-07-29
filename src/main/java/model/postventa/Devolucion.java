@@ -46,6 +46,10 @@ public class Devolucion implements Mostrable {
 
     public int getId() { return id; }
 
+    public void setId(int id){
+        this.id = id;
+    }
+
     public Cliente getCliente() { return cliente; }
 
     public Producto getProducto() { return producto; }

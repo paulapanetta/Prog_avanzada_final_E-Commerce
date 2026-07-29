@@ -102,7 +102,8 @@ public class DatabaseManager {
 
             stmt.execute("""
                     CREATE TABLE IF NOT EXISTS ordenes(
-                        numero text PRIMARY KEY,
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        numero TEXT NOT NULL UNIQUE,
                         cliente_id INTEGER NOT NULL,
                         fecha TEXT NOT NULL,
                         total REAL NOT NULL,
@@ -116,7 +117,7 @@ public class DatabaseManager {
             stmt.execute("""
                     CREATE TABLE IF NOT EXISTS items_orden(
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        orden_numero TEXT NOT NULL,
+                        orden_id INTEGER NOT NULL,
                         codigo_producto INTEGER NOT NULL,
                         cantidad INTEGER NOT NULL,
                         precio_unitario REAL NOT NULL,
@@ -133,22 +134,23 @@ public class DatabaseManager {
             stmt.execute("""
                     CREATE TABLE IF NOT EXISTS pagos(
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        orden_numero INTEGER NOT NULL,
+                        orden_id INTEGER NOT NULL,
                         monto REAL NOT NULL,
                         fecha TEXT NOT NULL,
                         estado TEXT NOT NULL,
                         metodo TEXT NOT NULL,
 
-                        FOREIGN KEY (orden_numero)
-                            REFERENCES ordenes(numero)
+                        FOREIGN KEY (orden_id)
+                            REFERENCES ordenes(id)
                     );
                     """);
 
 
             stmt.execute("""
                     CREATE TABLE IF NOT EXISTS envios(
-                        codigo_seguimiento TEXT PRIMARY KEY,
-                        orden_numero INTEGER NOT NULL,
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        codigo_seguimiento TEXT UNIQUE,
+                        orden_id INTEGER NOT NULL,
                         direccion TEXT NOT NULL,
                         provincia TEXT NOT NULL,
                         ciudad TEXT NOT NULL,
@@ -157,17 +159,17 @@ public class DatabaseManager {
                         estado TEXT NOT NULL,
                         costo REAL NOT NULL,
 
-                        FOREIGN KEY (orden_numero)
-                            REFERENCES ordenes(numero)
+                        FOREIGN KEY (orden_id)
+                            REFERENCES ordenes(id)
                     );
                     """);
 
 
             stmt.execute("""
                     CREATE TABLE IF NOT EXISTS reclamos(
-                        numero INTEGER PRIMARY KEY,
+                        id INTEGER PRIMARY KEY,
                         cliente_id INTEGER NOT NULL,
-                        orden_numero INTEGER NOT NULL,
+                        orden_id INTEGER NOT NULL,
                         motivo TEXT NOT NULL,
                         fecha TEXT NOT NULL,
                         estado TEXT NOT NULL,
@@ -175,8 +177,8 @@ public class DatabaseManager {
                         FOREIGN KEY (cliente_id)
                             REFERENCES usuarios(id),
 
-                        FOREIGN KEY (orden_numero)
-                            REFERENCES ordenes(numero)
+                        FOREIGN KEY (orden_id)
+                            REFERENCES ordenes(id)
                     );
                     """);
 
@@ -206,6 +208,39 @@ public class DatabaseManager {
                     );
                     """);
 
+            stmt.execute("""
+                    CREATE TABLE IF NOT EXISTS devoluciones(
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        cliente_id INTEGER NOT NULL,
+                        producto_codigo INTEGER NOT NULL,
+                        motivo TEXT NOT NULL,
+                        fecha TEXT NOT NULL,
+                        estado TEXT NOT NULL,
+                    
+                        FOREIGN KEY (cliente_id)
+                            REFERENCES usuarios(id),
+                    
+                        FOREIGN KEY (producto_codigo)
+                            REFERENCES productos(codigo)
+                    );
+                    """);
+
+            stmt.execute("""
+                    CREATE TABLE IF NOT EXISTS calificaciones(
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        cliente_id INTEGER NOT NULL,
+                        producto_codigo INTEGER NOT NULL,
+                        puntuacion INTEGER NOT NULL,
+                        comentario TEXT,
+                        fecha TEXT NOT NULL,
+                
+                        FOREIGN KEY (cliente_id)
+                           REFERENCES usuarios(id),
+                
+                        FOREIGN KEY (producto_codigo)
+                           REFERENCES productos(codigo)
+                    );
+                    """);
 
             System.out.println("Base de datos inicializada correctamente.");
 

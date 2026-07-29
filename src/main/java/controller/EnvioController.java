@@ -6,7 +6,6 @@ import model.envio.Envio;
 import model.envio.TipoEnvio;
 
 import exceptions.DatosInvalidosException;
-import exceptions.EnvioNoEncontradoException;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,10 +20,10 @@ public class EnvioController {
     }
 
 
-    public Envio crear(String direccion, String provincia, String ciudad,
+    public Envio crear(int ordenId, String direccion, String provincia, String ciudad,
                        String codigoPostal, TipoEnvio tipoEnvio) {
 
-        Envio envio = new Envio(direccion, provincia, ciudad, codigoPostal, tipoEnvio);
+        Envio envio = new Envio(ordenId, direccion, provincia, ciudad, codigoPostal, tipoEnvio);
         envioDAO.guardar(envio);
 
         return envio;
@@ -34,22 +33,12 @@ public class EnvioController {
 
         Envio envio = envioDAO.buscarPorId(id);
 
-        if (envio == null) {
-            throw new EnvioNoEncontradoException("No existe un envio con id " + id);
-        }
-
         return envio;
     }
 
     public Envio buscarPorCodigoSeguimiento(String codigo) {
 
         Envio envio = envioDAO.buscarPorCodigoSeguimiento(codigo);
-
-        if (envio == null) {
-            throw new EnvioNoEncontradoException(
-                    "No existe un envio con codigo de seguimiento '" + codigo + "'"
-            );
-        }
 
         return envio;
     }

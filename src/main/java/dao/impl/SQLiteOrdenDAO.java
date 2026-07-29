@@ -1,12 +1,12 @@
 package dao.impl;
 
-import dao.OrdenDAO;
-import dao.ProductoDAO;
-import dao.UsuarioDAO;
+import dao.*;
 import database.DatabaseManager;
 import model.carrito.ItemCarrito;
+import model.envio.Envio;
 import model.orden.EstadoOrden;
 import model.orden.Orden;
+import model.pago.Pago;
 import model.producto.Producto;
 import model.usuario.Cliente;
 
@@ -21,15 +21,20 @@ public class SQLiteOrdenDAO implements OrdenDAO {
 
     private UsuarioDAO usuarioDAO;
     private ProductoDAO productoDAO;
-
+    private PagoDAO pagoDAO;
+    private EnvioDAO envioDAO;
 
     public SQLiteOrdenDAO(
             UsuarioDAO usuarioDAO,
-            ProductoDAO productoDAO
+            ProductoDAO productoDAO,
+            PagoDAO pagoDAO,
+            EnvioDAO envioDAO
     ){
 
         this.usuarioDAO = usuarioDAO;
         this.productoDAO = productoDAO;
+        this.pagoDAO = pagoDAO;
+        this.envioDAO = envioDAO;
     }
 
 
@@ -225,32 +230,35 @@ public class SQLiteOrdenDAO implements OrdenDAO {
     }
 
 
-    private Orden mapearOrden(
-            ResultSet rs
-    ) throws SQLException {
+    private Orden mapearOrden(ResultSet rs) throws SQLException {
 
-        int id =
-                rs.getInt("id");
+        int id = rs.getInt("id");
 
-        Cliente cliente =
-                (Cliente) usuarioDAO.buscarPorId(
-                        rs.getInt("cliente_id")
-                );
+        Cliente cliente = (Cliente) usuarioDAO.buscarPorId(rs.getInt("cliente_id"));
+
+        Pago pago = null;
+
+        List<Pago> pagos =
+                pagoDAO.obtenerPorOrden(id);
+
+        if(!pagos.isEmpty()){
+            pago = pagos.get(0);
+        }
+
+        Envio envio = envioDAO.buscarPorOrden(id);
 
         return new Orden(
                 id,
                 rs.getString("numero"),
                 cliente,
-                LocalDate.parse(
-                        rs.getString("fecha")
-                ),
+                LocalDate.parse(rs.getString("fecha")),
                 obtenerItems(id),
                 rs.getDouble("total"),
                 EstadoOrden.valueOf(
                         rs.getString("estado")
                 ),
-                null,
-                null,
+                pago,
+                envio,
                 new ArrayList<>()
         );
     }
@@ -376,30 +384,35 @@ public class SQLiteOrdenDAO implements OrdenDAO {
     public void actualizar(Orden orden) {
 
         String sql = """
-                UPDATE ordenes
-                SET estado = ?,
-                    total = ?
-                WHERE id = ?
-                """;
+            UPDATE ordenes
+            SET numero = ?,
+                estado = ?,
+                total = ?
+            WHERE id = ?
+            """;
 
         try(
                 Connection conn = DatabaseManager.getConnection();
-
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
             ps.setString(
                     1,
+                    orden.getNumero()
+            );
+
+            ps.setString(
+                    2,
                     orden.getEstado().name()
             );
 
             ps.setDouble(
-                    2,
+                    3,
                     orden.getTotal()
             );
 
             ps.setInt(
-                    3,
+                    4,
                     orden.getId()
             );
 
@@ -407,8 +420,7 @@ public class SQLiteOrdenDAO implements OrdenDAO {
 
         }catch(SQLException e){
 
-            throw new RuntimeException("Error al actualizar orden", e
-            );
+            throw new RuntimeException("Error al actualizar orden", e);
         }
     }
 

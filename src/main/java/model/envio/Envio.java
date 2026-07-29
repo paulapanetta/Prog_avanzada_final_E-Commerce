@@ -7,6 +7,7 @@ import exceptions.DatosInvalidosException;
 public class Envio implements Mostrable {
 
     private int id;
+    private int ordenId;
     private String codigoSeguimiento;
     private String direccion;
     private String provincia;
@@ -17,7 +18,7 @@ public class Envio implements Mostrable {
     private double costo;
 
 
-    public Envio(String direccion, String provincia,
+    public Envio(int ordenId, String direccion, String provincia,
                  String ciudad, String codigoPostal,
                  TipoEnvio tipoEnvio) {
 
@@ -33,6 +34,7 @@ public class Envio implements Mostrable {
             );
         }
 
+        this.ordenId = ordenId;
         this.direccion = direccion;
         this.provincia = provincia;
         this.ciudad = ciudad;
@@ -42,7 +44,7 @@ public class Envio implements Mostrable {
         this.costo = calcularCostoEnvio();
     }
 
-    public Envio(int id, String codigoSeguimiento,
+    public Envio(int id, String codigoSeguimiento, int ordenId,
                  String direccion, String provincia,
                  String ciudad, String codigoPostal,
                  TipoEnvio tipoEnvio, EstadoEnvio estado,
@@ -50,6 +52,7 @@ public class Envio implements Mostrable {
 
         this.id = id;
         this.codigoSeguimiento = codigoSeguimiento;
+        this.ordenId = ordenId;
         this.direccion = direccion;
         this.provincia = provincia;
         this.ciudad = ciudad;
@@ -60,6 +63,12 @@ public class Envio implements Mostrable {
     }
 
     public int getId() { return id; }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getOrdenId() {return ordenId;}
 
     public String getCodigoSeguimiento() { return codigoSeguimiento; }
 
@@ -131,6 +140,7 @@ public class Envio implements Mostrable {
     public String toString() {
         return "Envio{" +
                 "id=" + id +
+                ", ordenId=" + ordenId +
                 ", codigoSeguimiento='" + codigoSeguimiento + '\'' +
                 ", direccion='" + direccion + '\'' +
                 ", provincia='" + provincia + '\'' +

@@ -10,13 +10,14 @@ import java.time.LocalDate;
 public class Pago {
 
     private int id;
+    private int ordenId;
     private double monto;
     private LocalDate fecha;
     private EstadoPago estado;
     private ProcesadorPago metodo;
 
 
-    public Pago(double monto, ProcesadorPago metodo) {
+    public Pago(int ordenId, double monto, ProcesadorPago metodo) {
 
         if (monto <= 0) {
             throw new DatosInvalidosException(
@@ -31,16 +32,18 @@ public class Pago {
             );
         }
 
+        this.ordenId = ordenId;
         this.monto = monto;
         this.metodo = metodo;
         this.fecha = LocalDate.now();
         this.estado = EstadoPago.PENDIENTE;
     }
 
-    public Pago(int id, double monto, LocalDate fecha,
+    public Pago(int id, int ordenId, double monto, LocalDate fecha,
                 EstadoPago estado, ProcesadorPago metodo) {
 
         this.id = id;
+        this.ordenId = ordenId;
         this.monto = monto;
         this.fecha = fecha;
         this.estado = estado;
@@ -49,6 +52,10 @@ public class Pago {
 
 
     public int getId() { return id; }
+
+    public void setId(int id) { this.id = id; }
+
+    public int getOrdenId() {return ordenId;}
 
     public double getMonto() { return monto; }
 
@@ -80,6 +87,7 @@ public class Pago {
     public String toString() {
         return "Pago{" +
                 "id=" + id +
+                ", ordenId=" + ordenId +
                 ", monto=" + monto +
                 ", fecha=" + fecha +
                 ", estado=" + estado +
