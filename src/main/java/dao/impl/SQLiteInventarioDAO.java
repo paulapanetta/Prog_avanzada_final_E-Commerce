@@ -36,15 +36,8 @@ public class SQLiteInventarioDAO implements InventarioDAO {
         ){
             for(StockProducto stock : inventario.getStocks()){
 
-                ps.setInt(
-                        1,
-                        stock.getProducto().getCodigo()
-                );
-
-                ps.setInt(
-                        2,
-                        stock.getCantidad()
-                );
+                ps.setInt(1, stock.getProducto().getCodigo());
+                ps.setInt(2, stock.getCantidad());
 
                 ps.executeUpdate();
             }

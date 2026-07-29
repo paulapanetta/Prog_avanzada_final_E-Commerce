@@ -62,15 +62,19 @@ public class SQLiteCarritoDAO implements CarritoDAO {
 
             psCarrito.executeUpdate();
 
+
             ResultSet keys = psCarrito.getGeneratedKeys();
 
-            int idCarrito = 0;
+            int idCarrito;
 
-            if(keys.next()){
+            if (keys.next()) {
                 idCarrito = keys.getInt(1);
+            } else {
+                throw new RuntimeException("No se pudo obtener el ID del carrito.");
             }
 
             carrito.setId(idCarrito);
+
 
             PreparedStatement psItem = conn.prepareStatement(sqlItem);
 
@@ -96,7 +100,11 @@ public class SQLiteCarritoDAO implements CarritoDAO {
                         item.getPrecioUnitario()
                 );
 
-                psItem.executeUpdate();
+                int filas = psItem.executeUpdate();
+
+                if (filas == 0) {
+                    throw new RuntimeException("No se pudo guardar un item del carrito.");
+                }
             }
 
 
@@ -276,7 +284,11 @@ public class SQLiteCarritoDAO implements CarritoDAO {
                         item.getPrecioUnitario()
                 );
 
-                ps.executeUpdate();
+                int filas = ps.executeUpdate();
+
+                if (filas == 0) {
+                    throw new RuntimeException("No existe el registro a actualizar.");
+                }
             }
 
         }catch(SQLException e){
@@ -304,7 +316,11 @@ public class SQLiteCarritoDAO implements CarritoDAO {
                     carritoId
             );
 
-            ps.executeUpdate();
+            int filas = ps.executeUpdate();
+
+            if (filas == 0) {
+                throw new RuntimeException("No existe el item a eliminar.");
+            }
 
         }catch(SQLException e){
 
@@ -331,7 +347,11 @@ public class SQLiteCarritoDAO implements CarritoDAO {
                     id
             );
 
-            ps.executeUpdate();
+            int filas = ps.executeUpdate();
+
+            if (filas == 0) {
+                throw new RuntimeException("No existe el carrito a eliminar.");
+            }
 
         }catch(SQLException e){
 

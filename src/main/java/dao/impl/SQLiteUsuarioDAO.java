@@ -34,7 +34,7 @@ public class SQLiteUsuarioDAO implements UsuarioDAO {
 
         try(
                 Connection conn = DatabaseManager.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)
+                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ){
 
             ps.setString(1, usuario.getNombre());
@@ -46,6 +46,12 @@ public class SQLiteUsuarioDAO implements UsuarioDAO {
             ps.setString(7, usuario.getRol().name());
 
             ps.executeUpdate();
+
+            ResultSet keys = ps.getGeneratedKeys();
+
+            if (keys.next()) {
+                usuario.setId(keys.getInt(1));
+            }
 
         }catch(SQLException e){
 

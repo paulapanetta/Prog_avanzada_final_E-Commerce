@@ -37,7 +37,7 @@ public class SQLiteProductoDAO implements ProductoDAO {
 
         try (
                 Connection conn = DatabaseManager.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)
+                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
 
             ps.setString(1, producto.getNombre());
@@ -49,6 +49,12 @@ public class SQLiteProductoDAO implements ProductoDAO {
             ps.setString(7, obtenerTipoProducto(producto));
 
             ps.executeUpdate();
+
+            ResultSet keys = ps.getGeneratedKeys();
+
+            if (keys.next()) {
+                producto.setCodigo(keys.getInt(1));
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Error al guardar el producto.", e);

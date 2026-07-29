@@ -29,30 +29,25 @@ public class Categoria {
         this.estado = estado;
     }
 
-    // Sin setter porque SQLite asigna el ID
-    public int getId() {
-        return id;
+    public int getId() {return id;}
+
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getNombre() {return nombre;}
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
+    public String getDescripcion() {return descripcion;}
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
-    public EstadoCategoria getEstado() {
-        return estado;
-    }
+    public EstadoCategoria getEstado() {return estado;}
 
     public void setEstado(EstadoCategoria estado) {
         this.estado = estado;

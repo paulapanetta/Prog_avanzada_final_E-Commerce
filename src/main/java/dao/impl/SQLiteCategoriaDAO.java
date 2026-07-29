@@ -5,10 +5,7 @@ import database.DatabaseManager;
 import model.producto.Categoria;
 import model.producto.EstadoCategoria;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +21,7 @@ public class SQLiteCategoriaDAO implements CategoriaDAO {
 
         try (
                 Connection conn = DatabaseManager.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)
+                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ) {
 
             ps.setString(1, categoria.getNombre());
@@ -32,6 +29,12 @@ public class SQLiteCategoriaDAO implements CategoriaDAO {
             ps.setString(3, categoria.getEstado().name());
 
             ps.executeUpdate();
+
+            ResultSet keys = ps.getGeneratedKeys();
+
+            if (keys.next()) {
+                categoria.setId(keys.getInt(1));
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Error al guardar la categoría.", e);

@@ -53,34 +53,13 @@ public class SQLiteCalificacionDAO implements CalificacionDAO {
                 )
         ){
 
-            ps.setInt(
-                    1,
-                    calificacion.getCliente().getId()
-            );
-
-            ps.setInt(
-                    2,
-                    calificacion.getProducto().getCodigo()
-            );
-
-            ps.setInt(
-                    3,
-                    calificacion.getPuntuacion()
-            );
-
-            ps.setString(
-                    4,
-                    calificacion.getComentario()
-            );
-
-            ps.setString(
-                    5,
-                    calificacion.getFecha().toString()
-            );
-
+            ps.setInt(1, calificacion.getCliente().getId());
+            ps.setInt(2, calificacion.getProducto().getCodigo());
+            ps.setInt(3, calificacion.getPuntuacion());
+            ps.setString(4, calificacion.getComentario());
+            ps.setString(5, calificacion.getFecha().toString());
 
             ps.executeUpdate();
-
 
             ResultSet keys = ps.getGeneratedKeys();
 

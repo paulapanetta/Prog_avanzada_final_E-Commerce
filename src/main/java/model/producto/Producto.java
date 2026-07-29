@@ -44,8 +44,11 @@ public abstract class Producto implements Mostrable, Calculable, Descontable {
     }
 
 
-    // sin setter pq dsp lo asigna SQLite
     public int getCodigo() { return codigo; }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
+    }
 
     public String getNombre() { return nombre; }
 

@@ -69,6 +69,10 @@ public class Orden {
 
     public int getId() { return id; }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getNumero() { return numero; }
 
     public Cliente getCliente() { return cliente; }
@@ -119,7 +123,7 @@ public class Orden {
         return "Orden{" +
                 "id=" + id +
                 ", numero='" + numero + '\'' +
-                ", cliente=" + cliente.getEmail() +
+                ", cliente=" + (cliente != null ? cliente.getEmail() : "null") +
                 ", fecha=" + fecha +
                 ", total=" + total +
                 ", estado=" + estado +

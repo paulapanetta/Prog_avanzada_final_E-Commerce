@@ -46,40 +46,16 @@ public class SQLiteDevolucionDAO implements DevolucionDAO {
 
         try(
                 Connection conn = DatabaseManager.getConnection();
-                PreparedStatement ps = conn.prepareStatement(
-                        sql,
-                        Statement.RETURN_GENERATED_KEYS
-                )
+                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ){
 
-            ps.setInt(
-                    1,
-                    devolucion.getCliente().getId()
-            );
-
-            ps.setInt(
-                    2,
-                    devolucion.getProducto().getCodigo()
-            );
-
-            ps.setString(
-                    3,
-                    devolucion.getMotivo()
-            );
-
-            ps.setString(
-                    4,
-                    devolucion.getFecha().toString()
-            );
-
-            ps.setString(
-                    5,
-                    devolucion.getEstado().name()
-            );
-
+            ps.setInt(1, devolucion.getCliente().getId());
+            ps.setInt(2, devolucion.getProducto().getCodigo());
+            ps.setString(3, devolucion.getMotivo());
+            ps.setString(4, devolucion.getFecha().toString());
+            ps.setString(5, devolucion.getEstado().name());
 
             ps.executeUpdate();
-
 
             ResultSet keys = ps.getGeneratedKeys();
 

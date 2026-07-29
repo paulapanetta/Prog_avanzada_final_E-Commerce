@@ -47,40 +47,16 @@ public class SQLiteReclamoDAO implements ReclamoDAO {
 
         try(
                 Connection conn = DatabaseManager.getConnection();
-                PreparedStatement ps = conn.prepareStatement(
-                        sql,
-                        Statement.RETURN_GENERATED_KEYS
-                )
+                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ){
 
-            ps.setInt(
-                    1,
-                    reclamo.getCliente().getId()
-            );
-
-            ps.setInt(
-                    2,
-                    reclamo.getOrden().getId()
-            );
-
-            ps.setString(
-                    3,
-                    reclamo.getMotivo()
-            );
-
-            ps.setString(
-                    4,
-                    reclamo.getFecha().toString()
-            );
-
-            ps.setString(
-                    5,
-                    reclamo.getEstado().name()
-            );
-
+            ps.setInt(1, reclamo.getCliente().getId());
+            ps.setInt(2, reclamo.getOrden().getId());
+            ps.setString(3, reclamo.getMotivo());
+            ps.setString(4, reclamo.getFecha().toString());
+            ps.setString(5, reclamo.getEstado().name());
 
             ps.executeUpdate();
-
 
             ResultSet keys = ps.getGeneratedKeys();
 

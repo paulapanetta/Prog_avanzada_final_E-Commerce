@@ -45,8 +45,11 @@ public abstract class Usuario implements Mostrable{
         this.rol = rol;
     }
 
-    // sin setter pq dsp lo asigna SQLite
     public int getId() { return id; }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getNombre() { return nombre; }
 

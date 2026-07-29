@@ -55,51 +55,29 @@ public class SQLiteOrdenDAO implements OrdenDAO {
         try(
                 Connection conn = DatabaseManager.getConnection();
 
-                PreparedStatement ps = conn.prepareStatement(
-                        sql,
-                        Statement.RETURN_GENERATED_KEYS
-                )
+                PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ){
 
-            ps.setString(
-                    1,
-                    orden.getNumero()
-            );
-
-            ps.setInt(
-                    2,
-                    orden.getCliente().getId()
-            );
-
-            ps.setString(
-                    3,
-                    orden.getFecha().toString()
-            );
-
-            ps.setDouble(
-                    4,
-                    orden.getTotal()
-            );
-
-            ps.setString(
-                    5,
-                    orden.getEstado().name()
-            );
+            ps.setString(1, orden.getNumero());
+            ps.setInt(2, orden.getCliente().getId());
+            ps.setString(3, orden.getFecha().toString());
+            ps.setDouble(4, orden.getTotal());
+            ps.setString(5, orden.getEstado().name());
 
             ps.executeUpdate();
 
             ResultSet keys = ps.getGeneratedKeys();
 
-            int idOrden = 0;
+            int idOrden;
 
-            if(keys.next()){
+            if (keys.next()) {
                 idOrden = keys.getInt(1);
+                orden.setId(idOrden);
+            } else {
+                throw new SQLException("No se pudo obtener el ID de la orden.");
             }
 
-            guardarItems(
-                    idOrden,
-                    orden.getItems()
-            );
+            guardarItems(idOrden, orden.getItems());
 
         }catch(SQLException e){
 
