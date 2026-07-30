@@ -48,14 +48,12 @@ public class ReporteController {
         this.pagoDAO = pagoDAO;
     }
 
-    // cant total usuarios
     public int cantidadUsuarios() {
 
         return usuarioDAO.obtenerTodos().size();
     }
 
 
-    // cant clientes
     public int cantidadClientes() {
 
         int cantidad = 0;
@@ -71,14 +69,12 @@ public class ReporteController {
     }
 
 
-    //cant total productos
     public int cantidadProductos() {
 
         return productoDAO.obtenerTodos().size();
     }
 
 
-    // productos x categoria
     public List<Producto> productosPorCategoria(int categoriaId) {
 
         return productoDAO.obtenerTodos()
@@ -89,7 +85,6 @@ public class ReporteController {
     }
 
 
-    // productos sin stock
     public List<StockProducto> productosSinStock() {
 
         Inventario inventario = inventarioDAO.obtenerInventario();
@@ -102,7 +97,6 @@ public class ReporteController {
     }
 
 
-    // productos + vendidos
     public Map<String, Integer> productosMasVendidos() {
 
         Map<String, Integer> ventas = new HashMap<>();
@@ -127,13 +121,11 @@ public class ReporteController {
         return ventas;
     }
 
-    // cant ordenes generadas
     public int cantidadOrdenes() {
 
         return ordenDAO.obtenerTodos().size();
     }
 
-    // ordenes x estado
     public Map<EstadoOrden, Integer> ordenesPorEstado() {
 
         Map<EstadoOrden, Integer> reporte = new HashMap<>();
@@ -157,7 +149,6 @@ public class ReporteController {
     }
 
 
-    // rec total
     public double recaudacionTotal() {
 
         double total = 0;
@@ -171,7 +162,6 @@ public class ReporteController {
     }
 
 
-    // clientes con + compras
     public Map<String, Integer> clientesConMasCompras() {
 
         Map<String, Integer> compras = new HashMap<>();
@@ -238,7 +228,6 @@ public class ReporteController {
                 .toList();
     }
 
-    // recaudacion x metodo de pago
     public Map<String, Double> recaudacionPorMetodo() {
 
         Map<String, Double> recaudacion = new HashMap<>();

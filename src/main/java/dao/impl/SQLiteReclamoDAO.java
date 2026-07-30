@@ -45,8 +45,14 @@ public class SQLiteReclamoDAO implements ReclamoDAO {
             """;
 
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ){
 
@@ -81,8 +87,14 @@ public class SQLiteReclamoDAO implements ReclamoDAO {
             WHERE id = ?
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -113,8 +125,14 @@ public class SQLiteReclamoDAO implements ReclamoDAO {
             FROM reclamos
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()
         ){
@@ -146,8 +164,14 @@ public class SQLiteReclamoDAO implements ReclamoDAO {
             WHERE cliente_id = ?
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -183,8 +207,14 @@ public class SQLiteReclamoDAO implements ReclamoDAO {
             WHERE id = ?
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -220,8 +250,14 @@ public class SQLiteReclamoDAO implements ReclamoDAO {
             WHERE id = ?
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 

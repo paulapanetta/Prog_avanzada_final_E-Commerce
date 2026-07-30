@@ -50,8 +50,14 @@ public class SQLiteCarritoDAO implements CarritoDAO {
                 VALUES (?, ?, ?, ?)
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement psCarrito = conn.prepareStatement(sqlCarrito, Statement.RETURN_GENERATED_KEYS)
         ){
 
@@ -123,8 +129,14 @@ public class SQLiteCarritoDAO implements CarritoDAO {
                 WHERE id = ?
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -170,8 +182,14 @@ public class SQLiteCarritoDAO implements CarritoDAO {
                 WHERE cliente_id = ?
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -205,8 +223,14 @@ public class SQLiteCarritoDAO implements CarritoDAO {
                 WHERE carrito_id = ?
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -217,8 +241,8 @@ public class SQLiteCarritoDAO implements CarritoDAO {
             while(rs.next()){
 
                 Producto producto = productoDAO.buscarPorId(
-                                rs.getInt("codigo_producto")
-                        );
+                        rs.getInt("codigo_producto")
+                );
 
                 if(producto == null){
                     throw new ProductoNoEncontradoException("El producto no existe.");
@@ -257,8 +281,14 @@ public class SQLiteCarritoDAO implements CarritoDAO {
                 VALUES (?, ?, ?, ?)
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -304,8 +334,14 @@ public class SQLiteCarritoDAO implements CarritoDAO {
                 WHERE carrito_id = ?
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
 
                 PreparedStatement ps =
                         conn.prepareStatement(sql)
@@ -338,8 +374,14 @@ public class SQLiteCarritoDAO implements CarritoDAO {
                 WHERE id = ?
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)){
 
             ps.setInt(

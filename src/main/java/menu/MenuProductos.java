@@ -1,13 +1,35 @@
 package menu;
 
+import controller.CategoriaController;
+import controller.InventarioController;
+import controller.ProductoController;
+import model.producto.Categoria;
+import model.producto.EstadoProducto;
+import model.producto.Producto;
+import model.producto.ProductoDigital;
+import model.producto.ProductoFisico;
+import model.producto.ProductoImportado;
+
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuProductos {
 
     private final Scanner scanner;
+    private final ProductoController productoController;
+    private final CategoriaController categoriaController;
+    private final InventarioController inventarioController;
 
-    public MenuProductos(Scanner scanner) {
+    public MenuProductos(
+            Scanner scanner,
+            ProductoController productoController,
+            CategoriaController categoriaController,
+            InventarioController inventarioController
+    ) {
         this.scanner = scanner;
+        this.productoController = productoController;
+        this.categoriaController = categoriaController;
+        this.inventarioController = inventarioController;
     }
 
     public void mostrar() {
@@ -53,59 +75,104 @@ public class MenuProductos {
         System.out.print("Opcion: ");
         int tipo = leerEntero();
 
-        System.out.print("Codigo unico: ");
-        String codigo = scanner.nextLine().trim();
         System.out.print("Nombre: ");
         String nombre = scanner.nextLine().trim();
         System.out.print("Descripción: ");
         String descripcion = scanner.nextLine().trim();
         System.out.print("Precio: ");
         double precio = leerDouble();
+
         System.out.print("Categoria (ID): ");
         int categoriaId = leerEntero();
-        System.out.print("Stock inicial: ");
-        int stock = leerEntero();
+        Categoria categoria = categoriaController.buscarPorId(categoriaId);
+
         System.out.print("Peso: ");
         double peso = leerDouble();
+        System.out.print("Stock inicial: ");
+        int stock = leerEntero();
 
-        System.out.println("Producto creado correctamente.");
+        Producto producto = switch (tipo) {
+            case 1 -> new ProductoFisico(nombre, descripcion, precio, categoria, peso, EstadoProducto.ACTIVO);
+            case 2 -> new ProductoDigital(nombre, descripcion, precio, categoria, peso, EstadoProducto.ACTIVO);
+            case 3 -> new ProductoImportado(nombre, descripcion, precio, categoria, peso, EstadoProducto.ACTIVO);
+            default -> throw new IllegalArgumentException("Tipo de producto invalido.");
+        };
+
+        productoController.guardar(producto);
+
+        inventarioController.agregarProducto(producto, stock);
+
+        System.out.println("Producto creado correctamente. Codigo asignado: " + producto.getCodigo());
     }
 
     private void modificarProducto() {
         System.out.print("Codigo del producto a modificar: ");
-        String codigo = scanner.nextLine().trim();
+        int codigo = leerEntero();
+
+        System.out.print("Nuevo nombre: ");
+        String nombre = scanner.nextLine().trim();
+        System.out.print("Nueva descripcion: ");
+        String descripcion = scanner.nextLine().trim();
+        System.out.print("Nuevo peso: ");
+        double peso = leerDouble();
+
+        productoController.modificar(codigo, nombre, descripcion, peso);
+
         System.out.println("Producto modificado correctamente.");
     }
 
     private void eliminarProducto() {
         System.out.print("Codigo del producto a eliminar: ");
-        String codigo = scanner.nextLine().trim();
+        int codigo = leerEntero();
+
+        productoController.eliminar(codigo);
+
         System.out.println("Producto eliminado correctamente.");
     }
 
     private void buscarProducto() {
         System.out.print("Codigo del producto: ");
-        String codigo = scanner.nextLine().trim();
-        // System.out.println(p.mostrarInformacion());
+        int codigo = leerEntero();
+
+        Producto p = productoController.buscarPorId(codigo);
+        p.mostrarInformacion();
     }
 
     private void listarProductos() {
+        List<Producto> productos = productoController.listar();
+
+        if (productos.isEmpty()) {
+            System.out.println("No hay productos cargados.");
+            return;
+        }
+
         System.out.println("Listado de productos");
+        productos.forEach(Producto::mostrarInformacion);
     }
 
     private void validarDisponibilidad() {
         System.out.print("Codigo del producto: ");
-        String codigo = scanner.nextLine().trim();
+        int codigo = leerEntero();
         System.out.print("Cantidad deseada: ");
         int cantidad = leerEntero();
-        System.out.println("Disponibilidad validada.");
+
+        int stockActual = inventarioController.buscarStock(codigo).getCantidad();
+
+        if (stockActual >= cantidad) {
+            System.out.println("Disponible. Stock actual: " + stockActual);
+        } else {
+            System.out.println("No hay disponibilidad suficiente. Stock actual: " + stockActual);
+        }
     }
 
     private void aplicarDescuento() {
         System.out.print("Codigo del producto: ");
-        String codigo = scanner.nextLine().trim();
+        int codigo = leerEntero();
         System.out.print("Porcentaje de descuento: ");
         double porcentaje = leerDouble();
+
+        productoController.aplicarDescuento(codigo, porcentaje);
+
         System.out.println("Descuento aplicado correctamente.");
     }
 

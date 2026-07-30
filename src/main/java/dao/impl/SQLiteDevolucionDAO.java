@@ -44,8 +44,14 @@ public class SQLiteDevolucionDAO implements DevolucionDAO {
             """;
 
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ){
 
@@ -80,8 +86,14 @@ public class SQLiteDevolucionDAO implements DevolucionDAO {
             WHERE id = ?
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -112,8 +124,14 @@ public class SQLiteDevolucionDAO implements DevolucionDAO {
             FROM devoluciones
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()
         ){
@@ -146,8 +164,14 @@ public class SQLiteDevolucionDAO implements DevolucionDAO {
             """;
 
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -184,8 +208,14 @@ public class SQLiteDevolucionDAO implements DevolucionDAO {
             """;
 
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -223,8 +253,14 @@ public class SQLiteDevolucionDAO implements DevolucionDAO {
             WHERE id = ?
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 

@@ -10,7 +10,6 @@ public class Main {
     public static void main(String[] args) {
 
         DatabaseManager.inicializarBase();
-        Datos.cargar();
 
         try {
 
@@ -38,5 +37,4 @@ public class Main {
 
         }
     }
-
 }

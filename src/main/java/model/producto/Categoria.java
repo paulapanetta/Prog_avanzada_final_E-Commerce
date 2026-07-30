@@ -7,7 +7,6 @@ public class Categoria {
     private String descripcion;
     private EstadoCategoria estado;
 
-    // Constructor para categoría nueva
     public Categoria(String nombre,
                      String descripcion,
                      EstadoCategoria estado) {
@@ -17,7 +16,6 @@ public class Categoria {
         this.estado = estado;
     }
 
-    // Constructor para recuperar categoría de la BD
     public Categoria(int id,
                      String nombre,
                      String descripcion,
@@ -51,6 +49,16 @@ public class Categoria {
 
     public void setEstado(EstadoCategoria estado) {
         this.estado = estado;
+    }
+
+    public void mostrarInformacion() {
+        System.out.printf(
+                "[%d] %-20s | %-45s | Estado: %s%n",
+                id,
+                nombre,
+                descripcion,
+                estado
+        );
     }
 
     @Override

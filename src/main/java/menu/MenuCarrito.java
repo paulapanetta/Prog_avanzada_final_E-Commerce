@@ -1,17 +1,36 @@
 package menu;
 
+import controller.CarritoController;
+import controller.ProductoController;
+import model.carrito.Carrito;
+import model.carrito.ItemCarrito;
+import model.producto.Producto;
+import model.usuario.Cliente;
+import model.usuario.Usuario;
+
+import exceptions.PermisoDenegadoException;
+
 import java.util.Scanner;
 
 public class MenuCarrito {
 
     private final Scanner scanner;
+    private final CarritoController carritoController;
+    private final ProductoController productoController;
+    private final Usuario usuarioLogueado;
 
-    public MenuCarrito(Scanner scanner) {
+    public MenuCarrito(Scanner scanner, CarritoController carritoController,
+                       ProductoController productoController, Usuario usuarioLogueado) {
         this.scanner = scanner;
+        this.carritoController = carritoController;
+        this.productoController = productoController;
+        this.usuarioLogueado = usuarioLogueado;
     }
 
     public void mostrar() {
         boolean volver = false;
+
+        Cliente cliente = obtenerClienteLogueado();
 
         while (!volver) {
             System.out.println();
@@ -21,8 +40,7 @@ public class MenuCarrito {
             System.out.println("3. Modificar cantidad");
             System.out.println("4. Vaciar carrito");
             System.out.println("5. Visualizar carrito");
-            System.out.println("6. Calcular subtotal");
-            System.out.println("7. Calcular total");
+            System.out.println("6. Calcular total");
             System.out.println("0. Volver al menu principal");
             System.out.print("Selecciona una opcion: ");
 
@@ -30,13 +48,12 @@ public class MenuCarrito {
 
             try {
                 switch (opcion) {
-                    case 1 -> agregarProducto();
-                    case 2 -> eliminarProducto();
-                    case 3 -> modificarCantidad();
-                    case 4 -> vaciarCarrito();
-                    case 5 -> visualizarCarrito();
-                    case 6 -> calcularSubtotal();
-                    case 7 -> calcularTotal();
+                    case 1 -> agregarProducto(cliente);
+                    case 2 -> eliminarProducto(cliente);
+                    case 3 -> modificarCantidad(cliente);
+                    case 4 -> vaciarCarrito(cliente);
+                    case 5 -> visualizarCarrito(cliente);
+                    case 6 -> calcularTotal(cliente);
                     case 0 -> volver = true;
                     default -> System.out.println("Opcion incorrecta. Intenta nuevamente.");
                 }
@@ -46,43 +63,69 @@ public class MenuCarrito {
         }
     }
 
-    private void agregarProducto() {
-        System.out.print("Código del producto: ");
-        String codigo = scanner.nextLine().trim();
+    private Cliente obtenerClienteLogueado() {
+        if (!(usuarioLogueado instanceof Cliente cliente)) {
+            throw new PermisoDenegadoException("Solo un cliente puede operar el carrito de compras.");
+        }
+        return cliente;
+    }
+
+    private void agregarProducto(Cliente cliente) {
+        System.out.print("Codigo del producto: ");
+        int codigo = leerEntero();
         System.out.print("Cantidad: ");
         int cantidad = leerEntero();
+
+        carritoController.agregarProducto(cliente, codigo, cantidad);
+
         System.out.println("Producto agregado al carrito.");
     }
 
-    private void eliminarProducto() {
+    private void eliminarProducto(Cliente cliente) {
         System.out.print("Codigo del producto: ");
-        String codigo = scanner.nextLine().trim();
+        int codigo = leerEntero();
+
+        Producto producto = productoController.buscarPorId(codigo);
+        carritoController.eliminarProducto(cliente, producto);
+
         System.out.println("Producto eliminado del carrito.");
     }
 
-    private void modificarCantidad() {
+    private void modificarCantidad(Cliente cliente) {
         System.out.print("Codigo del producto: ");
-        String codigo = scanner.nextLine().trim();
+        int codigo = leerEntero();
         System.out.print("Nueva cantidad: ");
         int cantidad = leerEntero();
+
+        carritoController.modificarCantidad(cliente, codigo, cantidad);
+
         System.out.println("Cantidad modificada.");
     }
 
-    private void vaciarCarrito() {
+    private void vaciarCarrito(Cliente cliente) {
+        carritoController.vaciar(cliente);
         System.out.println("Carrito vaciado.");
     }
 
-    private void visualizarCarrito() {
+    private void visualizarCarrito(Cliente cliente) {
+        Carrito carrito = carritoController.obtenerCarritoDeCliente(cliente);
+
+        if (carrito.getItems().isEmpty()) {
+            System.out.println("El carrito esta vacio.");
+            return;
+        }
+
         System.out.println("Contenido del carrito");
+        for (ItemCarrito item : carrito.getItems()) {
+            System.out.println(item);
+        }
     }
 
-    private void calcularSubtotal() {
-        System.out.print("Codigo del producto: ");
-        String codigo = scanner.nextLine().trim();
-    }
+    private void calcularTotal(Cliente cliente) {
+        Carrito carrito = carritoController.obtenerCarritoDeCliente(cliente);
+        double total = carrito.calcularPrecioFinal();
 
-    private void calcularTotal() {
-        System.out.println("Total calculado.");
+        System.out.println("Total del carrito: $" + total);
     }
 
     private int leerOpcion() {

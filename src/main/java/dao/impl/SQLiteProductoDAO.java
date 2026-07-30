@@ -35,8 +35,14 @@ public class SQLiteProductoDAO implements ProductoDAO {
         VALUES (?, ?, ?, ?, ?, ?, ?)
         """;
 
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
         try (
-                Connection conn = DatabaseManager.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
 
@@ -70,8 +76,14 @@ public class SQLiteProductoDAO implements ProductoDAO {
         WHERE codigo = ?
         """;
 
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
         try (
-                Connection conn = DatabaseManager.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)
         ) {
 
@@ -117,8 +129,14 @@ public class SQLiteProductoDAO implements ProductoDAO {
         WHERE nombre = ?
         """;
 
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
         try (
-                Connection conn = DatabaseManager.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)
         ) {
 
@@ -164,8 +182,14 @@ public class SQLiteProductoDAO implements ProductoDAO {
         String sql = "SELECT * FROM productos";
 
 
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
         try (
-                Connection conn = DatabaseManager.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()
         ) {
@@ -214,8 +238,14 @@ public class SQLiteProductoDAO implements ProductoDAO {
             """;
 
 
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
         try (
-                Connection conn = DatabaseManager.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)
         ) {
 
@@ -275,8 +305,14 @@ public class SQLiteProductoDAO implements ProductoDAO {
             """;
 
 
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
         try (
-                Connection conn = DatabaseManager.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)
         ) {
 
@@ -311,8 +347,14 @@ public class SQLiteProductoDAO implements ProductoDAO {
             """;
 
 
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
         try (
-                Connection conn = DatabaseManager.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)
         ) {
 

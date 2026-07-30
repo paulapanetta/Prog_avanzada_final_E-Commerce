@@ -28,8 +28,14 @@ public class SQLiteUsuarioDAO implements UsuarioDAO {
                 VALUES (?, ?, ?, ?, ?, ?, ?)
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ){
 
@@ -64,8 +70,14 @@ public class SQLiteUsuarioDAO implements UsuarioDAO {
                 WHERE id = ?
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -94,8 +106,14 @@ public class SQLiteUsuarioDAO implements UsuarioDAO {
                 WHERE email = ?
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -125,8 +143,14 @@ public class SQLiteUsuarioDAO implements UsuarioDAO {
                 FROM usuarios
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()
         ){
@@ -159,8 +183,14 @@ public class SQLiteUsuarioDAO implements UsuarioDAO {
                 WHERE id = ?
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -187,8 +217,14 @@ public class SQLiteUsuarioDAO implements UsuarioDAO {
                 WHERE id = ?
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -199,6 +235,37 @@ public class SQLiteUsuarioDAO implements UsuarioDAO {
         }catch(SQLException e){
 
             throw new RuntimeException("Error al eliminar usuario.", e);
+        }
+    }
+
+    @Override
+    public void cambiarRol(int id, Rol nuevoRol) {
+
+        String sql = """
+                UPDATE usuarios
+                SET rol = ?
+                WHERE id = ?
+                """;
+
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
+                PreparedStatement ps = conn.prepareStatement(sql)
+        ){
+
+            ps.setString(1, nuevoRol.name());
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+
+        }catch(SQLException e){
+
+            throw new RuntimeException("Error al cambiar el rol del usuario.", e);
         }
     }
 

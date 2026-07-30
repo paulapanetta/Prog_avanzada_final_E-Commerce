@@ -60,6 +60,15 @@ public class StockProducto {
     }
 
 
+    public void mostrarInformacion() {
+        System.out.printf(
+                "[%d] %-35s | Cantidad: %d%n",
+                producto.getCodigo(),
+                producto.getNombre(),
+                cantidad
+        );
+    }
+
     @Override
     public String toString() {
 

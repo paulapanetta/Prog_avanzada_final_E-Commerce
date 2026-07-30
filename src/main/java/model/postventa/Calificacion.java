@@ -18,7 +18,6 @@ public class Calificacion implements Mostrable {
     private LocalDate fecha;
 
 
-    // Calificación nueva
     public Calificacion(Cliente cliente,
                         Producto producto,
                         int puntuacion,
@@ -31,7 +30,6 @@ public class Calificacion implements Mostrable {
         this.fecha = LocalDate.now();
     }
 
-    // Calificación recuperada de la BD
     public Calificacion(int id,
                         Cliente cliente,
                         Producto producto,

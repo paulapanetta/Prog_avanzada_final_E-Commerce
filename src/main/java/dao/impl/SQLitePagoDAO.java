@@ -29,8 +29,14 @@ public class SQLitePagoDAO implements PagoDAO {
             """;
 
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))
         {
 
@@ -66,8 +72,14 @@ public class SQLitePagoDAO implements PagoDAO {
             WHERE id = ?
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -102,8 +114,14 @@ public class SQLitePagoDAO implements PagoDAO {
             FROM pagos
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()
         ){
@@ -137,8 +155,14 @@ public class SQLitePagoDAO implements PagoDAO {
             WHERE orden_id = ?
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -171,8 +195,14 @@ public class SQLitePagoDAO implements PagoDAO {
             WHERE id = ?
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -196,8 +226,14 @@ public class SQLitePagoDAO implements PagoDAO {
             WHERE id = ?
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
             ps.setInt(1,id);

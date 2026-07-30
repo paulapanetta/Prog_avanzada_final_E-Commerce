@@ -15,7 +15,6 @@ public abstract class Producto implements Mostrable, Calculable, Descontable {
     private EstadoProducto estado;
 
 
-    // Constructor para producto nuevo
     public Producto(String nombre, String descripcion,
                     double precio, Categoria categoria,
                     double peso, EstadoProducto estado) {
@@ -28,7 +27,6 @@ public abstract class Producto implements Mostrable, Calculable, Descontable {
         this.estado = estado;
     }
 
-    // Constructor para recuperar producto de la BD
     public Producto(int codigo, String nombre,
                     String descripcion, double precio,
                     Categoria categoria,
@@ -88,7 +86,16 @@ public abstract class Producto implements Mostrable, Calculable, Descontable {
 
     @Override
     public void mostrarInformacion() {
-        System.out.println(this);
+        System.out.printf(
+                "[%d] %-35s $%10.2f (final: $%10.2f)  | Categoria: %-20s | Estado: %-10s | %s%n",
+                codigo,
+                nombre,
+                precio,
+                calcularPrecioFinal(),
+                categoria != null ? categoria.getNombre() : "-",
+                estado,
+                getClass().getSimpleName()
+        );
     }
 
     @Override

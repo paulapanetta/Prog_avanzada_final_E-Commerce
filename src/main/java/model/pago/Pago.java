@@ -85,6 +85,18 @@ public class Pago {
         return aprobado;
     }
 
+    public void mostrarInformacion() {
+        System.out.printf(
+                "[%d] Orden: %-6d | Monto: $%10.2f | Fecha: %s | Estado: %-12s | Metodo: %s%n",
+                id,
+                ordenId,
+                monto,
+                fecha,
+                estado,
+                metodo != null ? metodo.getClass().getSimpleName() : "-"
+        );
+    }
+
     @Override
     public String toString() {
         return "Pago{" +

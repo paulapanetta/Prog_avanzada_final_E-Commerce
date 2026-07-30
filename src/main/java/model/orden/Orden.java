@@ -122,6 +122,18 @@ public class Orden {
         cambiarEstado(EstadoOrden.CANCELADA);
     }
 
+    public void mostrarInformacion() {
+        System.out.printf(
+                "[%d] %-15s | Cliente: %-25s | Fecha: %s | Total: $%10.2f | Estado: %s%n",
+                id,
+                numero,
+                cliente != null ? cliente.getEmail() : "-",
+                fecha,
+                total,
+                estado
+        );
+    }
+
     @Override
     public String toString() {
         return "Orden{" +

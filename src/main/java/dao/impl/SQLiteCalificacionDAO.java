@@ -45,8 +45,14 @@ public class SQLiteCalificacionDAO implements CalificacionDAO {
             """;
 
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(
                         sql,
                         Statement.RETURN_GENERATED_KEYS
@@ -70,7 +76,7 @@ public class SQLiteCalificacionDAO implements CalificacionDAO {
 
         }catch(SQLException e){
 
-            throw new RuntimeException("Error al guardar calificación", e);
+            throw new RuntimeException("Error al guardar calificacion", e);
         }
     }
 
@@ -84,8 +90,14 @@ public class SQLiteCalificacionDAO implements CalificacionDAO {
             WHERE id = ?
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -100,7 +112,7 @@ public class SQLiteCalificacionDAO implements CalificacionDAO {
 
         }catch(SQLException e){
 
-            throw new RuntimeException("Error al buscar calificación", e);
+            throw new RuntimeException("Error al buscar calificacion", e);
         }
 
         return null;
@@ -118,8 +130,14 @@ public class SQLiteCalificacionDAO implements CalificacionDAO {
             """;
 
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql);
                 ResultSet rs = ps.executeQuery()
         ){
@@ -152,8 +170,14 @@ public class SQLiteCalificacionDAO implements CalificacionDAO {
             WHERE producto_codigo = ?
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -189,8 +213,14 @@ public class SQLiteCalificacionDAO implements CalificacionDAO {
             """;
 
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -229,8 +259,14 @@ public class SQLiteCalificacionDAO implements CalificacionDAO {
             """;
 
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
 
@@ -241,7 +277,7 @@ public class SQLiteCalificacionDAO implements CalificacionDAO {
 
         }catch(SQLException e){
 
-            throw new RuntimeException("Error al eliminar calificación", e);
+            throw new RuntimeException("Error al eliminar calificacion", e);
         }
     }
 

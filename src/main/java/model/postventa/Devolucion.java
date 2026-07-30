@@ -16,7 +16,6 @@ public class Devolucion implements Mostrable {
     private EstadoDevolucion estado;
 
 
-    // Devolución nueva
     public Devolucion(Cliente cliente,
                       Producto producto,
                       String motivo) {
@@ -28,7 +27,6 @@ public class Devolucion implements Mostrable {
         this.estado = EstadoDevolucion.PENDIENTE;
     }
 
-    // Devolución recuperada de la BD
     public Devolucion(int id, Cliente cliente,
                       Producto producto,
                       String motivo,

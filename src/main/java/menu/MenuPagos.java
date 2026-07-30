@@ -1,13 +1,25 @@
 package menu;
 
+import controller.PagoController;
+import model.pago.Pago;
+import strategy.PagoBilleteraVirtual;
+import strategy.PagoEfectivo;
+import strategy.PagoTarjetaCredito;
+import strategy.PagoTarjetaDebito;
+import strategy.PagoTransferencia;
+import strategy.ProcesadorPago;
+
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuPagos {
 
     private final Scanner scanner;
+    private final PagoController pagoController;
 
-    public MenuPagos(Scanner scanner) {
+    public MenuPagos(Scanner scanner, PagoController pagoController) {
         this.scanner = scanner;
+        this.pagoController = pagoController;
     }
 
     public void mostrar() {
@@ -49,25 +61,56 @@ public class MenuPagos {
         System.out.println("2. Tarjeta de debito");
         System.out.println("3. Transferencia bancaria");
         System.out.println("4. Billetera virtual");
-        System.out.println("5. Pago en efectivo");
+        System.out.println("5. Pago contra entrega (efectivo)");
         System.out.print("Opcion: ");
-        int metodo = leerEntero();
+        int opcionMetodo = leerEntero();
 
-        System.out.println("Pago procesado correctamente.");
+        ProcesadorPago metodo = switch (opcionMetodo) {
+            case 1 -> new PagoTarjetaCredito();
+            case 2 -> new PagoTarjetaDebito();
+            case 3 -> new PagoTransferencia();
+            case 4 -> new PagoBilleteraVirtual();
+            case 5 -> new PagoEfectivo();
+            default -> throw new IllegalArgumentException("Metodo de pago invalido.");
+        };
+
+        Pago pago = pagoController.procesarPago(ordenId, metodo);
+
+        System.out.println("Pago procesado correctamente. Estado: " + pago.getEstado());
     }
 
     private void consultarPago() {
         System.out.print("ID del pago: ");
         int id = leerEntero();
+
+        Pago pago = pagoController.buscarPorId(id);
+        System.out.println(pago);
     }
 
     private void listarPagosPorOrden() {
         System.out.print("ID de la orden: ");
         int ordenId = leerEntero();
+
+        List<Pago> pagos = pagoController.listarPorOrden(ordenId);
+
+        if (pagos.isEmpty()) {
+            System.out.println("Esa orden no tiene pagos registrados.");
+            return;
+        }
+
+        pagos.forEach(Pago::mostrarInformacion);
     }
 
     private void listarTodosLosPagos() {
+        List<Pago> pagos = pagoController.listar();
+
+        if (pagos.isEmpty()) {
+            System.out.println("No hay pagos cargados.");
+            return;
+        }
+
         System.out.println("Listado de pagos");
+        pagos.forEach(Pago::mostrarInformacion);
     }
 
     private int leerOpcion() {

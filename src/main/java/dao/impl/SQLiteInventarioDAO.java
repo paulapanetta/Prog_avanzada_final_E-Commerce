@@ -30,8 +30,14 @@ public class SQLiteInventarioDAO implements InventarioDAO {
             VALUES (1, ?, ?)
             """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
                 PreparedStatement ps = conn.prepareStatement(sql)
         ){
             for(StockProducto stock : inventario.getStocks()){
@@ -58,8 +64,14 @@ public class SQLiteInventarioDAO implements InventarioDAO {
                 FROM stock_productos
                 """;
 
-        try(
-                Connection conn = DatabaseManager.getConnection();
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
+        try (
 
                 PreparedStatement ps = conn.prepareStatement(sql);
 

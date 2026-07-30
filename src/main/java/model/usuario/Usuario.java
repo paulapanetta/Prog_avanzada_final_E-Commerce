@@ -16,7 +16,6 @@ public abstract class Usuario implements Mostrable{
     private final Rol rol;
 
 
-    // Constructor para usuario nuevo
     public Usuario(String nombre, String apellido, String email,
                    String password, EstadoUsuario estado, Rol rol) {
 
@@ -29,7 +28,6 @@ public abstract class Usuario implements Mostrable{
         this.rol = rol;
     }
 
-    // Constructor para recuperar usuario de la BD
     public Usuario(int id, String nombre, String apellido,
                    String email, String password,
                    LocalDate fechaAlta,
@@ -98,7 +96,16 @@ public abstract class Usuario implements Mostrable{
 
     @Override
     public void mostrarInformacion() {
-        System.out.println(this);
+        System.out.printf(
+                "[%d] %-15s %-15s %-30s | Rol: %-22s | Estado: %-10s | Alta: %s%n",
+                id,
+                nombre,
+                apellido,
+                email,
+                rol,
+                estado,
+                fechaAlta
+        );
     }
 
     @Override

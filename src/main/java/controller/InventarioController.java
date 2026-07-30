@@ -4,6 +4,7 @@ import dao.InventarioDAO;
 import exceptions.ProductoNoEncontradoException;
 import model.inventario.Inventario;
 import model.inventario.StockProducto;
+import model.producto.Producto;
 
 public class InventarioController {
 
@@ -21,6 +22,15 @@ public class InventarioController {
         return inventarioDAO.obtenerInventario();
     }
 
+
+    public void agregarProducto(Producto producto, int cantidadInicial) {
+
+        Inventario inventario = obtenerInventario();
+
+        inventario.agregarProducto(new StockProducto(producto, cantidadInicial));
+
+        inventarioDAO.actualizar(inventario);
+    }
 
     public void ingresarStock(
             int codigoProducto,

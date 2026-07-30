@@ -1,13 +1,20 @@
 package menu;
 
+import controller.UsuarioController;
+import model.usuario.Rol;
+import model.usuario.Usuario;
+
 import java.util.Scanner;
+import java.util.Set;
 
 public class MenuRoles {
 
     private final Scanner scanner;
+    private final UsuarioController usuarioController;
 
-    public MenuRoles(Scanner scanner) {
+    public MenuRoles(Scanner scanner, UsuarioController usuarioController) {
         this.scanner = scanner;
+        this.usuarioController = usuarioController;
     }
 
     public void mostrar() {
@@ -40,21 +47,59 @@ public class MenuRoles {
 
     private void listarRoles() {
         System.out.println("Roles del sistema");
-        System.out.println("CLIENTE, ADMINISTRADOR, OPERADOR_VENTAS, LOGISTICA");
+        for (Rol rol : Rol.values()) {
+            System.out.println("- " + rol);
+        }
     }
 
     private void verPermisos() {
-        System.out.print("Rol: ");
-        String rol = scanner.nextLine().trim();
+        System.out.print("Rol (CLIENTE, ADMINISTRADOR, OPERADOR_VENTAS, RESPONSABLE_LOGISTICA): ");
+        String texto = scanner.nextLine().trim().toUpperCase();
+
+        Rol rol;
+        try {
+            rol = Rol.valueOf(texto);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Rol invalido.");
+            return;
+        }
+
+        Set<Integer> opcionesPermitidas = MenuPrincipal.PERMISOS.getOrDefault(rol, Set.of());
+
+        if (opcionesPermitidas.isEmpty()) {
+            System.out.println("El rol " + rol + " no tiene permisos asignados.");
+            return;
+        }
+
         System.out.println("Permisos de " + rol);
+        opcionesPermitidas.stream()
+                .sorted()
+                .forEach(opcion -> System.out.println(
+                        opcion + ". " + MenuPrincipal.NOMBRES_OPCION.get(opcion)));
     }
 
     private void asignarRol() {
         System.out.print("ID del usuario: ");
         int id = leerEntero();
-        System.out.print("Nuevo rol: ");
-        String rol = scanner.nextLine().trim();
-        System.out.println("Rol asignado correctamente.");
+
+        Usuario usuario = usuarioController.buscarPorId(id);
+        System.out.println("Usuario: " + usuario.getNombre() + " " + usuario.getApellido()
+                + " | Rol actual: " + usuario.getRol());
+
+        System.out.print("Nuevo rol (CLIENTE, ADMINISTRADOR, OPERADOR_VENTAS, RESPONSABLE_LOGISTICA): ");
+        String texto = scanner.nextLine().trim().toUpperCase();
+
+        Rol nuevoRol;
+        try {
+            nuevoRol = Rol.valueOf(texto);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Rol invalido.");
+            return;
+        }
+
+        usuarioController.cambiarRol(id, nuevoRol);
+
+        System.out.println("Rol asignado correctamente. " + usuario.getEmail() + " ahora es " + nuevoRol);
     }
 
     private int leerOpcion() {

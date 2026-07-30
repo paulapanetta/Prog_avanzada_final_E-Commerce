@@ -1,5 +1,6 @@
 package dao;
 
+import model.usuario.Rol;
 import model.usuario.Usuario;
 
 import java.util.List;
@@ -12,5 +13,6 @@ public interface UsuarioDAO {
     List<Usuario> obtenerTodos();
     void actualizar(Usuario usuario);
     void eliminar(int id);
+    void cambiarRol(int id, Rol nuevoRol);
 
 }

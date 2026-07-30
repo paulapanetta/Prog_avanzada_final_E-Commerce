@@ -15,7 +15,6 @@ public class Reclamo implements Mostrable {
     private LocalDate fecha;
     private EstadoReclamo estado;
 
-    // Reclamo nuevo
     public Reclamo(Cliente cliente, Orden orden,
                    String motivo) {
 
@@ -26,7 +25,6 @@ public class Reclamo implements Mostrable {
         this.estado = EstadoReclamo.ABIERTO;
     }
 
-    // Reclamo recuperado de la BD
     public Reclamo(int id, Cliente cliente,
                    Orden orden, String motivo,
                    LocalDate fecha,

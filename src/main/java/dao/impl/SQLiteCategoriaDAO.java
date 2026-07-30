@@ -19,8 +19,14 @@ public class SQLiteCategoriaDAO implements CategoriaDAO {
             VALUES (?, ?, ?)
             """;
 
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
         try (
-                Connection conn = DatabaseManager.getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         ) {
 
@@ -51,8 +57,14 @@ public class SQLiteCategoriaDAO implements CategoriaDAO {
             WHERE id = ?
             """;
 
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
         try (
-                Connection conn = DatabaseManager.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)
         ) {
 
@@ -86,8 +98,14 @@ public class SQLiteCategoriaDAO implements CategoriaDAO {
             WHERE nombre = ?
             """;
 
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
         try (
-                Connection conn = DatabaseManager.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)
         ) {
 
@@ -119,8 +137,14 @@ public class SQLiteCategoriaDAO implements CategoriaDAO {
 
         String sql = "SELECT * FROM categorias";
 
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
         try (
-                Connection conn = DatabaseManager.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql);
                 ResultSet rs = pstmt.executeQuery()
         ) {
@@ -154,8 +178,14 @@ public class SQLiteCategoriaDAO implements CategoriaDAO {
             WHERE id = ?
             """;
 
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
         try (
-                Connection conn = DatabaseManager.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)
         ) {
 
@@ -179,8 +209,14 @@ public class SQLiteCategoriaDAO implements CategoriaDAO {
             WHERE id = ?
             """;
 
+        Connection conn;
+        try {
+            conn = DatabaseManager.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al conectar con la base de datos.", e);
+        }
+
         try (
-                Connection conn = DatabaseManager.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)
         ) {
 

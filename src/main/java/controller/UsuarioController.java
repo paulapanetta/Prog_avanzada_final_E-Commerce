@@ -120,6 +120,23 @@ public class UsuarioController {
         usuarioDAO.actualizar(usuario);
     }
 
+    public void cambiarRol(int id, Rol nuevoRol) {
+
+        if (nuevoRol == null) {
+            throw new DatosInvalidosException("Indica un rol valido");
+        }
+
+        Usuario usuario = buscarPorId(id);
+
+        if (usuario.getRol() == nuevoRol) {
+            throw new DatosInvalidosException(
+                    "El usuario '" + usuario.getEmail() + "' ya tiene el rol " + nuevoRol
+            );
+        }
+
+        usuarioDAO.cambiarRol(id, nuevoRol);
+    }
+
     public void validarPermiso(Usuario usuario, Rol... rolesPermitidos) {
 
         for (Rol rol : rolesPermitidos) {

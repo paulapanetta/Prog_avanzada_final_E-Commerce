@@ -1,5 +1,33 @@
 package menu;
 
+import controller.CalificacionController;
+import controller.CarritoController;
+import controller.CategoriaController;
+import controller.DevolucionController;
+import controller.EnvioController;
+import controller.InventarioController;
+import controller.OrdenController;
+import controller.PagoController;
+import controller.ProductoController;
+import controller.ReclamoController;
+import controller.ReporteController;
+import controller.UsuarioController;
+
+import dao.CalificacionDAO;
+import dao.CarritoDAO;
+import dao.CategoriaDAO;
+import dao.DevolucionDAO;
+import dao.EnvioDAO;
+import dao.InventarioDAO;
+import dao.OrdenDAO;
+import dao.PagoDAO;
+import dao.ProductoDAO;
+import dao.ReclamoDAO;
+import dao.UsuarioDAO;
+
+import factory.DAOFactory;
+import factory.SQLiteDAOFactory;
+
 import model.usuario.Rol;
 import model.usuario.Usuario;
 import exceptions.PermisoDenegadoException;
@@ -11,7 +39,7 @@ import java.util.Set;
 
 public class MenuPrincipal {
 
-    private static final Map<Rol, Set<Integer>> PERMISOS = new EnumMap<>(Rol.class);
+    static final Map<Rol, Set<Integer>> PERMISOS = new EnumMap<>(Rol.class);
 
     static {
         PERMISOS.put(Rol.CLIENTE, opciones(3, 6, 7, 10, 11));
@@ -24,7 +52,7 @@ public class MenuPrincipal {
         return Set.of(valores);
     }
 
-    private static final Map<Integer, String> NOMBRES_OPCION = Map.ofEntries(
+    static final Map<Integer, String> NOMBRES_OPCION = Map.ofEntries(
             Map.entry(1, "Gestión de Usuarios"),
             Map.entry(2, "Gestión de Roles"),
             Map.entry(3, "Gestión de Productos"),
@@ -59,18 +87,50 @@ public class MenuPrincipal {
         this.scanner = scanner;
         this.usuarioLogueado = usuarioLogueado;
 
-        this.menuUsuarios = new MenuUsuarios(scanner);
-        this.menuRoles = new MenuRoles(scanner);
-        this.menuProductos = new MenuProductos(scanner);
-        this.menuCategorias = new MenuCategorias(scanner);
-        this.menuInventario = new MenuInventario(scanner);
-        this.menuCarrito = new MenuCarrito(scanner);
-        this.menuOrdenes = new MenuOrdenes(scanner);
-        this.menuPagos = new MenuPagos(scanner);
-        this.menuEnvios = new MenuEnvios(scanner);
-        this.menuSeguimiento = new MenuSeguimiento(scanner);
-        this.menuReclamosDevoluciones = new MenuReclamosDevoluciones(scanner);
-        this.menuReportes = new MenuReportes(scanner);
+        DAOFactory factory = new SQLiteDAOFactory();
+
+        UsuarioDAO usuarioDAO = factory.crearUsuarioDAO();
+        CategoriaDAO categoriaDAO = factory.crearCategoriaDAO();
+        ProductoDAO productoDAO = factory.crearProductoDAO();
+        InventarioDAO inventarioDAO = factory.crearInventarioDAO();
+        CarritoDAO carritoDAO = factory.crearCarritoDAO();
+        OrdenDAO ordenDAO = factory.crearOrdenDAO();
+        PagoDAO pagoDAO = factory.crearPagoDAO();
+        EnvioDAO envioDAO = factory.crearEnvioDAO();
+        ReclamoDAO reclamoDAO = factory.crearReclamoDAO();
+        DevolucionDAO devolucionDAO = factory.crearDevolucionDAO();
+        CalificacionDAO calificacionDAO = factory.crearCalificacionDAO();
+
+        UsuarioController usuarioController = new UsuarioController(usuarioDAO);
+        ProductoController productoController = new ProductoController(productoDAO);
+        CategoriaController categoriaController = new CategoriaController(categoriaDAO, productoDAO);
+        InventarioController inventarioController = new InventarioController(inventarioDAO);
+        CarritoController carritoController = new CarritoController(carritoDAO, inventarioDAO);
+        OrdenController ordenController = new OrdenController(ordenDAO, carritoController, inventarioController);
+        PagoController pagoController = new PagoController(pagoDAO, ordenController);
+        EnvioController envioController = new EnvioController(envioDAO);
+        ReclamoController reclamoController = new ReclamoController(reclamoDAO);
+        DevolucionController devolucionController = new DevolucionController(devolucionDAO);
+        CalificacionController calificacionController = new CalificacionController(calificacionDAO);
+        ReporteController reporteController = new ReporteController(
+                usuarioDAO, productoDAO, inventarioDAO, ordenDAO, reclamoDAO, envioDAO, pagoDAO
+        );
+
+        this.menuUsuarios = new MenuUsuarios(scanner, usuarioController);
+        this.menuRoles = new MenuRoles(scanner, usuarioController);
+        this.menuProductos = new MenuProductos(scanner, productoController, categoriaController, inventarioController);
+        this.menuCategorias = new MenuCategorias(scanner, categoriaController);
+        this.menuInventario = new MenuInventario(scanner, inventarioController);
+        this.menuCarrito = new MenuCarrito(scanner, carritoController, productoController, usuarioLogueado);
+        this.menuOrdenes = new MenuOrdenes(scanner, ordenController, envioController, usuarioLogueado);
+        this.menuPagos = new MenuPagos(scanner, pagoController);
+        this.menuEnvios = new MenuEnvios(scanner, envioController);
+        this.menuSeguimiento = new MenuSeguimiento(scanner, ordenController, envioController);
+        this.menuReclamosDevoluciones = new MenuReclamosDevoluciones(
+                scanner, reclamoController, devolucionController, calificacionController,
+                ordenController, productoController, usuarioLogueado
+        );
+        this.menuReportes = new MenuReportes(scanner, reporteController);
     }
 
     public void iniciar() {

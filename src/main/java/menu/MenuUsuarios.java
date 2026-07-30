@@ -1,13 +1,25 @@
 package menu;
 
+import controller.UsuarioController;
+import model.usuario.Administrador;
+import model.usuario.Cliente;
+import model.usuario.EstadoUsuario;
+import model.usuario.OperadorVentas;
+import model.usuario.ResponsableLogistica;
+import model.usuario.Usuario;
+
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuUsuarios {
 
     private final Scanner scanner;
+    private final UsuarioController usuarioController;
 
-    public MenuUsuarios(Scanner scanner) {
+    public MenuUsuarios(Scanner scanner, UsuarioController usuarioController) {
         this.scanner = scanner;
+        this.usuarioController = usuarioController;
     }
 
     public void mostrar() {
@@ -56,16 +68,38 @@ public class MenuUsuarios {
         String email = scanner.nextLine().trim();
         System.out.print("Contraseña: ");
         String password = scanner.nextLine().trim();
-        System.out.print("Rol (CLIENTE / ADMINISTRADOR / OPERADOR_VENTAS / LOGISTICA): ");
-        String rol = scanner.nextLine().trim();
 
-        System.out.println("Usuario registrado correctamente.");
+        System.out.println("Rol:");
+        System.out.println("1. Cliente   2. Administrador   3. Operador de ventas   4. Responsable de logistica");
+        System.out.print("Opcion: ");
+        int rol = leerEntero();
+
+        Usuario usuario = switch (rol) {
+            case 1 -> new Cliente(nombre, apellido, email, password, LocalDate.now(), EstadoUsuario.ACTIVO);
+            case 2 -> new Administrador(nombre, apellido, email, password, LocalDate.now(), EstadoUsuario.ACTIVO);
+            case 3 -> new OperadorVentas(nombre, apellido, email, password, LocalDate.now(), EstadoUsuario.ACTIVO);
+            case 4 -> new ResponsableLogistica(nombre, apellido, email, password, LocalDate.now(), EstadoUsuario.ACTIVO);
+            default -> throw new IllegalArgumentException("Rol invalido.");
+        };
+
+        usuarioController.registrar(usuario);
+
+        System.out.println("Usuario registrado correctamente. ID asignado: " + usuario.getId());
     }
 
     private void modificarUsuario() {
         System.out.println("Modificar usuario");
         System.out.print("ID del usuario a modificar: ");
         int id = leerEntero();
+
+        System.out.print("Nuevo nombre: ");
+        String nombre = scanner.nextLine().trim();
+        System.out.print("Nuevo apellido: ");
+        String apellido = scanner.nextLine().trim();
+        System.out.print("Nuevo email: ");
+        String email = scanner.nextLine().trim();
+
+        usuarioController.modificar(id, nombre, apellido, email);
 
         System.out.println("Usuario modificado correctamente.");
     }
@@ -75,6 +109,8 @@ public class MenuUsuarios {
         System.out.print("ID del usuario a eliminar: ");
         int id = leerEntero();
 
+        usuarioController.eliminar(id);
+
         System.out.println("Usuario eliminado correctamente.");
     }
 
@@ -83,17 +119,28 @@ public class MenuUsuarios {
         System.out.print("ID del usuario: ");
         int id = leerEntero();
 
-        System.out.println("Usuario encontrado.");
+        Usuario usuario = usuarioController.buscarPorId(id);
+        usuario.mostrarInformacion();
     }
 
     private void listarUsuarios() {
+        List<Usuario> usuarios = usuarioController.listar();
+
+        if (usuarios.isEmpty()) {
+            System.out.println("No hay usuarios cargados.");
+            return;
+        }
+
         System.out.println("Listado de usuarios");
+        usuarios.forEach(Usuario::mostrarInformacion);
     }
 
     private void activarUsuario() {
         System.out.println("Activar usuario");
         System.out.print("ID del usuario: ");
         int id = leerEntero();
+
+        usuarioController.activar(id);
 
         System.out.println("Usuario activado.");
     }
@@ -102,6 +149,8 @@ public class MenuUsuarios {
         System.out.println("Desactivar usuario");
         System.out.print("ID del usuario: ");
         int id = leerEntero();
+
+        usuarioController.desactivar(id);
 
         System.out.println("Usuario desactivado.");
     }

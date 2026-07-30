@@ -11,7 +11,6 @@ public class DatabaseManager {
     private static Connection connection;
 
 
-    // unica conexion a la bd
     public static Connection getConnection() throws SQLException {
 
         if (connection == null || connection.isClosed()) {

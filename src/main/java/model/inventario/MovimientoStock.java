@@ -22,7 +22,6 @@ public class MovimientoStock {
         this.descripcion = descripcion;
     }
 
-    // recupera bd
     public MovimientoStock(int id,
                            int codigoProducto,
                            TipoMovimiento tipo,
